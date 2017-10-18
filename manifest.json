@@ -1,0 +1,19 @@
+{
+
+ "name": "My Daily Planner",
+ "description": "A daily planner that helps you stay productive",
+ "version": "1.0.0",
+ "manifest_version": 2,
+
+ "icons": {
+    "128": "icon.png"
+ },
+
+ "permissions": [
+    "history"
+  ],
+
+  "chrome_url_overrides" : {
+    "newtab": "productivity.html"
+  }
+}
