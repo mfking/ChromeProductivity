@@ -1,25 +1,12 @@
 
-/*var cols = ["col1", "col2", "col3", "col4", "col5", "col6"];
-var clicked = false;
-var theParent = document.querySelector("#row");
-document.getElementById("col1").addEventListener("click", doSomething);
 
-function doSomething() {
-	var grid = document.getElementById("col1");
-		if(clicked == false){
-			grid.style.width = '66.66%';
-			grid.style.height = '150%';
-			clicked = true;
-		}
-		else{
+var element = document.querySelector('.addBtn');
+                                      
+element.addEventListener("click", function(e) {
+    newElement();
+}, false);
 
-			grid.style.width = '33.33%';
-			grid.style.height = '100%';
-			clicked = false;
-		}
-
-} */
-
+// Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByTagName("LI");
 var i;
 for (i = 0; i < myNodelist.length; i++) {
@@ -47,9 +34,6 @@ list.addEventListener('click', function(ev) {
     ev.target.classList.toggle('checked');
   }
 }, false);
-
-var add = document.getElementsByClassName("addBtn");
-
 
 // Create a new list item when clicking on the "Add" button
 function newElement() {
