@@ -159,7 +159,7 @@ input {
 }
 
 .toDo:hover {
-    background-color: #bbb;
+    background: rgba(187, 187, 187, 0.4);
 }
 
 
