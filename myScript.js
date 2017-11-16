@@ -1,3 +1,7 @@
+/******************************* Main Page Script *******************************/
+var num = Math.floor(Math.random() * 6);
+var url = "url('images/" + num + ".jpg')";
+document.body.style.backgroundImage = url;
 
 /******************************* To Do List Script *******************************/
 var element = document.querySelector('.addBtn');
@@ -126,9 +130,12 @@ function newElement() {
 
 function showToDoList() {
     var list = document.getElementById("toDoList");
+    var button = document.getElementById("toDo");
     if(list.style.display == "none"){
       list.style.display = "block";
+      button.innerText = "Close";
     } else {
       list.style.display = "none";
+      button.innerText = "To Do List";
     }
 }
