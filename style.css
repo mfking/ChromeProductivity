@@ -20,9 +20,9 @@ h1 {
 [class*="col"] {
     float: left;
     padding: 15px;
-    border: 1px solid black;
     width: 33.33%;
     height: 100%;
+    display: inline-block;
 }
 
 [class*="row"] {
@@ -109,6 +109,13 @@ ul li.checked::before {
     clear: both;
 }
 
+.toDoList {
+    display: none;
+    position: absolute;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
 /* Style the input */
 input {
     border: none;
@@ -132,6 +139,22 @@ input {
 }
 
 .addBtn:hover {
+    background-color: #bbb;
+}
+
+.toDo {
+    padding: 10px;
+    width: 30%;
+    background: #d9d9d9;
+    color: #555;
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.toDo:hover {
     background-color: #bbb;
 }
 
