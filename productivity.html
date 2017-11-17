@@ -9,8 +9,10 @@
 		<!--<script type="text/javascript" src="myScript.js"></script>-->
     </head>
 	<body>
-		<h1> Productivity </h1>
+		<h1 id="header"> Productivity </h1>
 		<div class="row1">
+
+			<!-- To Do List -->
 			<div id="col" class="col">
 				<a id="toDo" class="toDo"> To Do List </a>
 				<div id="toDoList" class="toDoList">
@@ -21,8 +23,30 @@
 					</div>
 					<ul id="myUL"></ul>
 				</div>
-				<script type="text/javascript" src="myScript.js"></script>
+				<!--<script type="text/javascript" src="myScript.js"></script>-->
 			</div>
+
+			<!-- Weather -->
+			<div class="col">
+				<a id="weatherButton" class="weatherButton"> Weather </a>
+				<div id="weather" class="weather">
+					<span id="day1"></span>
+					<span id="day2"></span>
+					<span id="day3"></span>
+				</div>
+			</div>
+
+
 		</div> 
+		<!-- TEST -->
+		 <div id="wxWrap">
+    		<span id="wxIntro">
+        		Currently in Manhattan, NY: 
+    		</span>
+    		<span id="wxIcon2"></span>
+    		<span id="wxTemp"></span>
+  		</div>
+  		<script type="text/javascript" src="jquery.min.js"></script>
+  		<script type="text/javascript" src="myScript.js"></script>
 	</body>
 <html>

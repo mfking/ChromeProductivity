@@ -1,7 +1,19 @@
 /******************************* Main Page Script *******************************/
+
+//set the background image
 var num = Math.floor(Math.random() * 6);
 var url = "url('images/" + num + ".jpg')";
 document.body.style.backgroundImage = url;
+
+var header = document.getElementById("header");
+var date = new Date();
+if(date.getHours() < 12){
+  header.innerText = "Good Morning";
+} else if(date.getHours() < 5){
+  header.innerText = "Good Afternoon";
+} else {
+  header.innerText = "Good Evening";
+}
 
 /******************************* To Do List Script *******************************/
 var element = document.querySelector('.addBtn');
@@ -139,3 +151,44 @@ function showToDoList() {
       button.innerText = "To Do List";
     }
 }
+
+/** TEST FUNCTION **/
+
+$(function(){
+ 
+    // Specify the ZIP/location code and units (f or c)
+    var loc = '10001'; // or e.g. SPXX0050
+    var u = 'f';
+ 
+    var query = "SELECT item.condition FROM weather.forecast WHERE woeid in (select woeid from geo.places(1) where text='" + loc + "' and country='United States') AND u='" + u + "'";
+    var cacheBuster = Math.floor((new Date().getTime()) / 1200 / 1000);
+    var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + '&format=json&_nocache=' + cacheBuster;
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: url,
+      cache: true,
+      success: function(result){
+        console.log("Success");
+        console.log(result.query.results);
+        var info = result.query.results.channel.item.condition;
+        $('#wxIcon').css({
+          backgroundPosition: '-' + (61 * info.code) + 'px 0'
+        }).attr({
+          title: info.text
+        });
+        $('#wxIcon2').append('<img src="http://l.yimg.com/a/i/us/we/52/' + info.code + '.gif" width="34" height="34" title="' + info.text + '" />');
+        $('#wxTemp').html(info.temp + '&deg;' + (u.toUpperCase()));
+      }
+    }); 
+
+/*
+    $.ajax({
+        dataType: 'json',
+        url: url,
+        cache: true,
+        jsonpCallback: 'wxCallback'
+    }); */
+     
+});
