@@ -25,6 +25,7 @@ h1 {
     padding: 15px;
     width: 33.33%;
     height: 100%;
+    float: left;
     position: relative;
 }
 
@@ -99,7 +100,7 @@ ul li.checked::before {
 
 /* Style the header */
 .header {
-    background-color: #f44336;
+    background-color: rgba(244, 67, 54, 0.5);
     padding: 30px 40px;
     color: white;
     text-align: center;
@@ -118,6 +119,7 @@ ul li.checked::before {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     float: left;
+    width: 100%;
 }
 
 /* Style the input */
@@ -162,6 +164,53 @@ input {
     background: rgba(187, 187, 187, 0.4);
 }
 
+
+/************** Weather Styling **************/
+.weatherButton {
+    padding: 10px;
+    width: 30%;
+    background: rgba(0, 0, 0, 0.4);
+    color: #FFFFFF;
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.weatherButton:hover {
+    background: rgba(187, 187, 187, 0.4);
+}
+
+.forecast{
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    text-align: center;
+    width: 33.33%;
+    height: 100%;
+    float: left;
+    text-align: center;
+}
+
+
+#day1, #day2 {
+    border-right: 1px solid rgba(0, 0, 0, 0.3);;
+}
+
+.weather {
+    display: none;
+    position: relative;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    float: left;
+    width: 120%;
+    height: 275px;
+}
+
+.temp{
+    font-size: 35pt;
+    margin: 20px 10px 10px 20px;
+}
 
 /************** Test Styling **************/
 

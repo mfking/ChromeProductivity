@@ -9,7 +9,7 @@
 		<!--<script type="text/javascript" src="myScript.js"></script>-->
     </head>
 	<body>
-		<h1 id="header"> Productivity </h1>
+		<h1 id="header"> Welcome </h1>
 		<div class="row1">
 
 			<!-- To Do List -->
@@ -19,7 +19,7 @@
 					<div id="myDIV" class="header">
   						<h2>My To Do List</h2>
   						<input type="text" id="myInput" placeholder="to do...">
-  						<a id="addBtn" class="addBtn">Add</a>
+  						<a id="addBtn" class="addBtn">Add</a> 
 					</div>
 					<ul id="myUL"></ul>
 				</div>
@@ -30,22 +30,21 @@
 			<div class="col">
 				<a id="weatherButton" class="weatherButton"> Weather </a>
 				<div id="weather" class="weather">
-					<span id="day1"></span>
-					<span id="day2"></span>
-					<span id="day3"></span>
+					<div id="day1" class="forecast">
+						<h3>Today</h3>
+						<p id="day1high" class="temp"> 50&deg;</p>
+					</div>
+					<div id="day2" class="forecast">
+						<h3 id="day2Label">Tomorrow</h3>
+						<p class="temp"> 50&deg;</p>
+					</div>
+					<div id="day3" class="forecast">
+						<h3 id="day3Label">Two Days</h3>
+						<p class="temp"> 50&deg;</p>
+					</div>
 				</div>
 			</div>
-
-
 		</div> 
-		<!-- TEST -->
-		 <div id="wxWrap">
-    		<span id="wxIntro">
-        		Currently in Manhattan, NY: 
-    		</span>
-    		<span id="wxIcon2"></span>
-    		<span id="wxTemp"></span>
-  		</div>
   		<script type="text/javascript" src="jquery.min.js"></script>
   		<script type="text/javascript" src="myScript.js"></script>
 	</body>

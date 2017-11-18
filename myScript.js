@@ -15,10 +15,15 @@ if(date.getHours() < 12){
   header.innerText = "Good Evening";
 }
 
+//for later usage (determining if the page has already been visited today)
+var day = date.getDate();
+var month = date.getMonth();
+var year = date.getFullYear();
+var dateString = "" + day + month + year;
+
 /******************************* To Do List Script *******************************/
 var element = document.querySelector('.addBtn');
 if(element){
-  console.log("ELEMENT1");
     element.addEventListener("click", function(e) {
       newElement();
       }, false);
@@ -26,7 +31,6 @@ if(element){
 
 var element = document.querySelector('.toDo');
 if(element){
-  console.log("ELEMENT2");
     element.addEventListener("click", function(e) {
       showToDoList();
       }, false);
@@ -152,15 +156,82 @@ function showToDoList() {
     }
 }
 
-/** TEST FUNCTION **/
+/******************************* Weather Script *******************************/
 
+//weather button click event
+var element = document.querySelector('.weatherButton');
+if(element){
+    element.addEventListener("click", function(e) {
+      showWeather();
+      }, false);
+}  
+
+//determine the days to display (if not done so already)
+if(dateString != localStorage.getItem("date")){
+
+  var tomorrow = document.getElementById("day2Label");
+  var twoDays = document.getElementById("day3Label");
+
+  switch(date.getDay()){
+    case 0:
+      tomorrow.innerText = "Monday";
+      twoDays.innerText = "Tuesday";
+      break;
+    case 1:
+      tomorrow.innerText = "Tuesday";
+      twoDays.innerText = "Wednesday";
+      break;  
+    case 2:
+      tomorrow.innerText = "Wednesday"; 
+      twoDays.innerText = "Thursday";
+      break;
+    case 3:
+      tomorrow.innerText = "Thursday";
+      twoDays.innerText = "Friday";
+      break;
+    case 4:
+      tomorrow.innerText = "Friday";
+      twoDays.innerText = "Saturday";
+      break;
+    case 5:
+      tomorrow.innerText = "Saturday";
+      twoDays.innerText = "Sunday";
+      break;
+    case 6:
+      tomorrow.innerText = "Sunday";
+      twoDays.innerText = "Monday";
+      break;
+  }
+
+  var day = date.getDate();
+  var month = date.getMonth();
+  var year = date.getFullYear();
+  var dateString = "" + day + month + year;
+  localStorage.setItem("date", dateString);
+}
+
+function showWeather(){
+  var weather = document.getElementById("weather");
+  var button = document.getElementById("weatherButton");
+  if(weather.style.display == "none"){
+      weather.style.display = "block";
+      button.innerText = "Close";
+    } else {
+      weather.style.display = "none";
+      weatherButton.innerText = "Weather";
+    }
+} 
+
+
+//function to call yahoo API to get and display weather information (should probably only call this a few times a day not
+//every time a tab opens --> will look into this)
 $(function(){
  
     // Specify the ZIP/location code and units (f or c)
-    var loc = '10001'; // or e.g. SPXX0050
+    var loc = '02481'; // or e.g. SPXX0050
     var u = 'f';
  
-    var query = "SELECT item.condition FROM weather.forecast WHERE woeid in (select woeid from geo.places(1) where text='" + loc + "' and country='United States') AND u='" + u + "'";
+    var query = "SELECT item.forecast FROM weather.forecast WHERE woeid in (select woeid from geo.places(1) where text='" + loc + "' and country='United States') AND u='" + u + "'";
     var cacheBuster = Math.floor((new Date().getTime()) / 1200 / 1000);
     var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + '&format=json&_nocache=' + cacheBuster;
 
@@ -171,24 +242,27 @@ $(function(){
       cache: true,
       success: function(result){
         console.log("Success");
-        console.log(result.query.results);
-        var info = result.query.results.channel.item.condition;
+
+        console.log(result.query.results.channel[0].item.forecast);
+        //gets the forcast --> channel[1] is tomorrow channel[2] is two days (up to 9)
+        var today = result.query.results.channel[0].item.forecast;
+        var tomorrow = result.query.results.channel[1].item.forecast;
+        var twoDays = result.query.results.channel[2].item.forecast;
+
+        document.getElementById("day1high").innerText = today.high + "\xB0";
+        var day2 = document.getElementById("day2");
+        var day3 = document.getElementById("day3");
+
+
+
+        /*var info = result.query.results.channel.item.condition;
         $('#wxIcon').css({
           backgroundPosition: '-' + (61 * info.code) + 'px 0'
         }).attr({
           title: info.text
         });
         $('#wxIcon2').append('<img src="http://l.yimg.com/a/i/us/we/52/' + info.code + '.gif" width="34" height="34" title="' + info.text + '" />');
-        $('#wxTemp').html(info.temp + '&deg;' + (u.toUpperCase()));
+        $('#wxTemp').html(info.temp + '&deg;' + (u.toUpperCase()));*/
       }
-    }); 
-
-/*
-    $.ajax({
-        dataType: 'json',
-        url: url,
-        cache: true,
-        jsonpCallback: 'wxCallback'
-    }); */
-     
+    });    
 });
