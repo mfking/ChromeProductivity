@@ -167,48 +167,46 @@ if(element){
 }  
 
 //determine the days to display (if not done so already)
-if(dateString != localStorage.getItem("date")){
 
-  var tomorrow = document.getElementById("day2Label");
-  var twoDays = document.getElementById("day3Label");
+var tomorrow = document.getElementById("day2Label");
+var twoDays = document.getElementById("day3Label");
 
-  switch(date.getDay()){
-    case 0:
-      tomorrow.innerText = "Monday";
-      twoDays.innerText = "Tuesday";
-      break;
-    case 1:
-      tomorrow.innerText = "Tuesday";
-      twoDays.innerText = "Wednesday";
-      break;  
-    case 2:
-      tomorrow.innerText = "Wednesday"; 
-      twoDays.innerText = "Thursday";
-      break;
-    case 3:
-      tomorrow.innerText = "Thursday";
-      twoDays.innerText = "Friday";
-      break;
-    case 4:
-      tomorrow.innerText = "Friday";
-      twoDays.innerText = "Saturday";
-      break;
-    case 5:
-      tomorrow.innerText = "Saturday";
-      twoDays.innerText = "Sunday";
-      break;
-    case 6:
-      tomorrow.innerText = "Sunday";
-      twoDays.innerText = "Monday";
-      break;
-  }
-
-  var day = date.getDate();
-  var month = date.getMonth();
-  var year = date.getFullYear();
-  var dateString = "" + day + month + year;
-  localStorage.setItem("date", dateString);
+switch(date.getDay()){
+  case 0:
+    tomorrow.innerText = "Monday";
+    twoDays.innerText = "Tuesday";
+    break;
+  case 1:
+    tomorrow.innerText = "Tuesday";
+    twoDays.innerText = "Wednesday";
+    break;  
+  case 2:
+    tomorrow.innerText = "Wednesday"; 
+    twoDays.innerText = "Thursday";
+    break;
+  case 3:
+    tomorrow.innerText = "Thursday";
+    twoDays.innerText = "Friday";
+    break;
+  case 4:
+    tomorrow.innerText = "Friday";
+    twoDays.innerText = "Saturday";
+    break;
+  case 5:
+    tomorrow.innerText = "Saturday";
+    twoDays.innerText = "Sunday";
+    break;
+  case 6:
+    tomorrow.innerText = "Sunday";
+    twoDays.innerText = "Monday";
+    break;
 }
+
+var day = date.getDate();
+var month = date.getMonth();
+var year = date.getFullYear();
+var dateString = "" + day + month + year;
+localStorage.setItem("date", dateString);
 
 function showWeather(){
   var weather = document.getElementById("weather");
