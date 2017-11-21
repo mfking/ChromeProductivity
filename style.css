@@ -1,3 +1,4 @@
+
 /************** GENERAL PAGE STYLING **************/
 body, html{
     /*background: lightblue; 
@@ -44,7 +45,7 @@ ul li {
     cursor: pointer;
     position: relative;
     padding: 12px 8px 12px 40px;
-    background: #eee;
+    background: rgba(238, 238, 238, 0.8);
     font-size: 18px;
     transition: 0.2s;
 
@@ -56,17 +57,17 @@ ul li {
 }
 
 ul li:nth-child(odd) {
-    background: #f9f9f9;
+    background: rgba(249, 249, 249, 0.8);
 }
 
 /* Darker background-color on hover */
 ul li:hover {
-    background: #ddd;
+    background: rgba(221, 221, 221, 0.8);
 }
 
 /* When clicked on, add a background color and strike out text */
 ul li.checked {
-    background: #888;
+    background: rgba(136, 136, 136, 0.8);
     color: #fff;
     text-decoration: line-through;
 }
@@ -100,7 +101,7 @@ ul li.checked::before {
 
 /* Style the header */
 .header {
-    background-color: rgba(244, 67, 54, 0.5);
+    background-color: rgba(244, 67, 54, 0.8);
     padding: 30px 40px;
     color: white;
     text-align: center;
@@ -123,7 +124,7 @@ ul li.checked::before {
 }
 
 /* Style the input */
-input {
+.todoInput {
     border: none;
     width: 75%;
     padding: 10px;
@@ -212,52 +213,173 @@ input {
     margin: 20px 10px 10px 20px;
 }
 
-/************** Test Styling **************/
 
-#wxWrap {
-    width: 350px;
-    background: #EEE; /* Old browsers */
-    background: -moz-linear-gradient(top, rgba(240,240,240,1) 0%, rgba(224,224,224,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(240,240,240,1)), color-stop(100%,rgba(224,224,224,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, rgba(240,240,240,1) 0%,rgba(224,224,224,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, rgba(240,240,240,1) 0%,rgba(224,224,224,1) 100%); /* Opera11.10+ */
-    background: -ms-linear-gradient(top, rgba(240,240,240,1) 0%,rgba(224,224,224,1) 100%); /* IE10+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f0f0', endColorstr='#e0e0e0',GradientType=0 ); /* IE6-9 */
-    background: linear-gradient(top, rgba(240,240,240,1) 0%,rgba(224,224,224,1) 100%); /* W3C */
-    padding: 2px 13px 2px 11px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+/************** Class List Styling **************/
+
+.classButton {
+    padding: 10px;
+    width: 30%;
+    background: rgba(0, 0, 0, 0.4);
+    color: #FFFFFF;
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
 }
-#wxIntro {
-    display: inline-block;
-    font: 14px/20px Arial,Verdana,sans-serif;
-    color: #666;
-    vertical-align: top;
-    padding-top: 9px;
+
+.classButton:hover {
+    background: rgba(187, 187, 187, 0.4);
 }
-#wxIcon {
-    display: inline-block;
-    width: 61px;
-    height: 34px;
-    margin: 2px 0 -1px 1px;
-    overflow: hidden;
-    background: url('http://l.yimg.com/a/lib/ywc/img/wicons.png') no-repeat 61px 0;
+
+.classes {
+    display: none;
+    position: relative;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+    float: left;
+    width: 100%;
 }
-#wxIcon2 {
-    display: inline-block;
-    width: 34px;
-    height: 34px;
-    margin: 1px 6px 0 8px;
-    overflow: hidden;
+
+.addClass {
+    display: none;
+    min-height: 34px;
 }
-#wxTemp {
+
+.addButton {
+    border-radius: 28px;
+    border: 1px solid white;
     display: inline-block;
-    font: 20px/28px Arial,Verdana,sans-serif;
-    color: #333;
-    vertical-align: top;
-    padding-top: 5px;
-    margin-left: 0;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 16px;
+    padding: 4px 8px;
+    text-decoration: none;
+}
+
+.addButton:active {
+    position:relative;
+    top:1px;
+}
+
+.addButton:hover{
+    background: rgba(187, 187, 187, 0.4);
+}
+
+.button {
+    text-align: right;
+    padding: 3px;
+}
+
+.classInput {
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    width: 80%;
+    padding: 8px;
+    float: left;
+    font-size: 16px;
+}
+
+
+.addClassBtn {
+    padding: 8px;
+    width: 20%;
+    background: rgba(217, 217, 217, 0.8);
+    color: #555;
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.addBtn:hover {
+    background-color: #bbb;
+}
+
+/*styling of the courses */
+.courseTitle {
+    font-size: 30pt;
+    color: white;
+    background: rgba(71, 190, 255, 0.8);
+    padding-top: 1px;
+    margin: 1px 0px 0px 0px;
+}
+
+.courseInput {
+    border: none;
+    width: 55%;
+    padding: 8px;
+    float: left;
+    font-size: 16px;
+}
+
+input[type=date] {
+  height: 34px;
+  margin: 0 auto;
+  width: 30%;
+  font-family: arial, sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  outline: none;
+  border: 0;
+  padding: 0 3px;
+  color: #555;
+  float: left;
+  
+  &::-webkit-clear-button {
+    font-size: 18px;
+    height: 30px;
+    position: relative;
+    right: 5px;
+    margin-right: 4px;
+    color: #fff
+  }
+  &::-webkit-inner-spin-button {
+    height: 30px;
+  }
+  &::-webkit-calendar-picker-indicator {
+    font-size: 18px;
+    
+    &:hover {
+      background-color: lighten(#2f2f2f,40%);
+      color: darken(#fff, 10%);
+      cursor: pointer;
+    }
+    &:active {
+      color: blue;
+    }
+  }
+}
+
+.courseBtn{
+    padding: 8px;
+    width: 15%;
+    background: #d9d9d9;
+    color: #555;
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.courseBtn:hover {
+    background-color: #bbb;
+}
+
+.closeCourseToDo {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 12px 16px 12px 16px;
+}
+
+.closeCourseToDo:hover {
+    background-color: #f44336;
+    color: white;
 }
 
 

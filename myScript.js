@@ -37,19 +37,24 @@ if(element){
 }   
                                
 
-var items = [];
-var checks = [];
-
-
 //add items from local storage
-items = JSON.parse(localStorage.getItem("items"));
-checks = JSON.parse(localStorage.getItem("checks"));
+var items = JSON.parse(localStorage.getItem("items"));
+if(!items){
+  items = [];
+}
+
+var checks = JSON.parse(localStorage.getItem("checks"));
+if(!checks){
+  checks = [];
+}
+
 var i;
 for(i = 0; i < items.length; i++){
   var li = document.createElement("li");
   var itemValue = items[i];
   var t = document.createTextNode(itemValue);
   li.appendChild(t);
+  li.className = "toDoItem"
   var ul = document.getElementById("myUL");
   if(ul){
     ul.appendChild(li);
@@ -61,7 +66,7 @@ for(i = 0; i < items.length; i++){
 }
 
 // Create a "close" button and append it to each list item
-var myNodelist = document.getElementsByTagName("LI");
+var myNodelist = document.getElementsByClassName("toDoItem");
 var i;
 for (i = 0; i < myNodelist.length; i++) {
   var span = document.createElement("SPAN");
@@ -119,6 +124,7 @@ function newElement() {
   var inputValue = document.getElementById("myInput").value;
   var t = document.createTextNode(inputValue);
   li.appendChild(t);
+  li.className = "toDoItem";
   if (inputValue === '') {
     alert("You must write something!");
   } else {
@@ -138,8 +144,17 @@ function newElement() {
 
   for (i = 0; i < close.length; i++) {
     close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
+    //remove the element from the display
+    var div = this.parentElement;
+    div.style.display = "none";
+  
+    //remove the element from the items list (storage)
+    var string = this.parentElement.innerText;
+    var index = items.indexOf(string.substring(0, string.length-1));
+    if(index > -1){
+      items.splice(index, 1);
+    }
+    localStorage.setItem("items", JSON.stringify(items));
     }
   }
 }
@@ -251,16 +266,271 @@ $(function(){
         var day2 = document.getElementById("day2");
         var day3 = document.getElementById("day3");
 
-
-
-        /*var info = result.query.results.channel.item.condition;
-        $('#wxIcon').css({
-          backgroundPosition: '-' + (61 * info.code) + 'px 0'
-        }).attr({
-          title: info.text
-        });
-        $('#wxIcon2').append('<img src="http://l.yimg.com/a/i/us/we/52/' + info.code + '.gif" width="34" height="34" title="' + info.text + '" />');
-        $('#wxTemp').html(info.temp + '&deg;' + (u.toUpperCase()));*/
+        //TO DO: IMPLEMENT GETTING/ DISPLAYING ALL DESIRED WEATHER INFO
       }
     });    
 });
+
+/******************************* Classes Script *******************************/
+//get list of classes
+var classList = JSON.parse(localStorage.getItem("classes"));
+if(!classList){
+  classList = [[]];
+}
+/*
+//add classes and class events
+//index [i][0] is class name, [i][1] is first event [i][2] is first event due date etc
+var i = 0, j=0;
+for(i = 0; i < classList.length; i++){
+  //create the class
+  var div = document.createElement("div");
+
+  //crate the header
+  var className = document.createElement("h3");
+  className.innerText = classList[i][0];
+
+  //create the list
+  var list = document.createElement("ul");
+
+  //TO DO: MAKE THE LIST
+  for(j = 1; j < classList[i].length; j+=2){
+    var item = classList[i][j];
+    var date = classList[i][j+1];
+  }
+
+  div.appendChild(className);
+  div.appendChild(list);
+} */
+
+//class List click event
+var element = document.querySelector('.classButton');
+if(element){
+    element.addEventListener("click", function(e) {
+      showClasses();
+      }, false);
+}
+
+//show add class click event
+var element = document.querySelector('.addButton');
+if(element){
+    element.addEventListener("click", function(e) {
+      showAddClass();
+      }, false);
+}
+
+//add class click event
+var element = document.querySelector('.addClassBtn');
+if(element){
+    element.addEventListener("click", function(e) {
+      addClass();
+      }, false);
+}
+
+//delete item event
+// Create a "close" button and append it to each list item
+var myNodelist = document.getElementsByClassName("courseToDo");
+var i;
+for (i = 0; i < myNodelist.length; i++) {
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "closeCourseToDo";
+  span.appendChild(txt);
+  myNodelist[i].appendChild(span);
+}
+
+// Click on a close button to hide the current list item
+var courseClose = document.getElementsByClassName("closeCourseToDo");
+var i;
+console.log("Close length: " + close.length);
+for (i = 0; i < courseClose.length; i++) {
+  courseClose[i].onclick = function() {
+
+    //remove the element from the display
+    var div = this.parentElement;
+    div.style.display = "none";
+  
+    //remove the element from the items list (storage)
+    var string = this.parentElement.innerText;
+    // edit this to remove from course info list 
+    /*
+    var index = items.indexOf(string.substring(0, string.length-1));
+    if(index > -1){
+      items.splice(index, 1);
+    }
+    localStorage.setItem("items", JSON.stringify(items));*/
+  }
+}
+
+
+//add item event
+var courseAdds = document.getElementsByClassName("courseBtn");
+var i;
+for (i = 0; i < courseAdds.length; i++) {
+  courseAdds[i].onclick = function() {
+    var li = document.createElement("li");
+    var course = this.id.substring(0, this.id.length-3);
+    var inputID = course + "Input";
+    console.log(course);
+    console.log(inputID);
+    var inputValue = document.getElementById(inputID).value;
+    var t = document.createTextNode(inputValue);
+    li.appendChild(t);
+    li.className = "courseToDo";
+    if (inputValue != '')
+      var id = course + "toDo";
+      document.getElementById(id).appendChild(li);
+    }
+  
+    document.getElementById("myInput").value = "";
+  
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "closeCourseToDo";
+    span.appendChild(txt);
+    li.appendChild(span);
+  
+    for (i = 0; i < courseClose.length; i++) {
+      courseClose[i].onclick = function() {
+      //remove the element from the display
+      var div = this.parentElement;
+      div.style.display = "none";
+      }
+    }
+  }
+
+
+
+//function to show classes
+function showClasses(){
+  var classes = document.getElementById("classes");
+  var button = document.getElementById("classButton");
+  if(classes.style.display == "none"){
+      classes.style.display = "block";
+      button.innerText = "Close";
+    } else {
+      classes.style.display = "none";
+      button.innerText = "Classes";
+    }
+} 
+
+//function to show add class
+function showAddClass(){
+  var addClass = document.getElementById("addClass");
+  var button = document.getElementById("addButton");
+  if(addClass.style.display == "none"){
+    addClass.style.display = "block";
+    button.innerText = "x";
+    button.style.padding = "4px 9px";
+  }else {
+      addClass.style.display = "none";
+      button.innerText = "+";
+      button.style.padding = "4px 8px";
+    }
+}
+
+function addClass() {
+  var div = document.createElement("div");
+
+  //create the header
+  var inputValue = document.getElementById("classInput").value;
+  var className = document.createElement("p");
+  className.innerText = inputValue;
+  className.className = "courseTitle";
+  div.appendChild(className);
+  div.className = "course";
+  div.id = inputValue;
+
+  //create the list
+  var list = document.createElement("ul");
+  list.className = "courseToDo";
+  list.id = inputValue + "toDo";
+  div.appendChild(list);
+
+  //create the input for new class
+  var createNew = document.createElement("div");
+  var input = document.createElement("input");
+  input.type = "text";
+  input.className = "courseInput";
+  input.id = inputValue + "Input";
+  input.placeholder = "homework, exam, quiz..."
+  var date = document.createElement("input");
+  date.type = "date";
+  date.className = "inputDate";
+  date.id = inputValue + "Date";
+  var btn = document.createElement("a");
+  btn.innerText = "add";
+  btn.className = "courseBtn";
+  btn.id = inputValue + "Btn";
+  createNew.appendChild(input);
+  createNew.appendChild(date);
+  createNew.appendChild(btn);
+  div.appendChild(createNew);
+
+  //add the class
+  document.getElementById("classes").appendChild(div);
+
+  for (i = 0; i < courseAdds.length; i++) {
+    courseAdds[i].onclick = function() {
+      var li = document.createElement("li");
+      var course = this.id.substring(0, this.id.length-3);
+      var inputID = course + "Input";
+      console.log(course);
+      console.log(inputID);
+      var inputValue = document.getElementById(inputID).value;
+      var t = document.createTextNode(inputValue);
+      li.appendChild(t);
+      li.className = "courseToDo";
+      if (inputValue === '') {
+        alert("You must write something!");
+      } else {
+        var id = course + "toDo";
+        document.getElementById(id).appendChild(li);
+      }
+    
+      document.getElementById(inputID).value = "";
+
+      //create date 
+      var dateIn = document.getElementById(course + "Date").value;
+      var dateSpan = document.createElement("SPAN");
+      var dateTxt = document.createTextNode(dateIn);
+      console.log(dateIn);
+      dateSpan.className = "dateSpan";
+      li.appendChild(dateSpan);
+    
+      //create close button
+      var span = document.createElement("SPAN");
+      var txt = document.createTextNode("\u00D7");
+      span.className = "closeCourseToDo";
+      span.appendChild(txt);
+      li.appendChild(span);
+    
+      for (i = 0; i < courseClose.length; i++) {
+        courseClose[i].onclick = function() {
+        //remove the element from the display
+        var div = this.parentElement;
+        div.style.display = "none";
+        }
+      }
+    }
+  }
+
+  //reset the input and button
+  document.getElementById("classInput").value = "";
+  document.getElementById("addClass").style.display = "none";
+  document.getElementById("addButton").innerText = "+";
+  document.getElementById("addButton").style.padding = "4px 8px";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
