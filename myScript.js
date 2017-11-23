@@ -9,7 +9,7 @@ var header = document.getElementById("header");
 var date = new Date();
 if(date.getHours() < 12){
   header.innerText = "Good Morning";
-} else if(date.getHours() < 5){
+} else if(date.getHours() < 17){
   header.innerText = "Good Afternoon";
 } else {
   header.innerText = "Good Evening";
@@ -79,7 +79,6 @@ for (i = 0; i < myNodelist.length; i++) {
 // Click on a close button to hide the current list item
 var close = document.getElementsByClassName("close");
 var i;
-console.log("Close length: " + close.length);
 for (i = 0; i < close.length; i++) {
   close[i].onclick = function() {
 
@@ -94,6 +93,12 @@ for (i = 0; i < close.length; i++) {
       items.splice(index, 1);
     }
     localStorage.setItem("items", JSON.stringify(items));
+
+    index = checks.indexOf(string.substring(0, string.length-1));
+    if(index > -1){
+      checks.splice(index, 1);
+    }
+    localStorage.setItem("checks", JSON.stringify(checks));
   }
 }
 
@@ -105,7 +110,7 @@ if(list){
       ev.target.classList.toggle('checked');
 
       var str = ev.target.innerText;
-      if(ev.target.className == 'checked'){
+      if(ev.target.className == 'toDoItem checked'){
         checks.push(str.substring(0, str.length - 1));
       } else {
         var index = checks.indexOf(str.substring(0, str.length-1));
@@ -155,6 +160,12 @@ function newElement() {
       items.splice(index, 1);
     }
     localStorage.setItem("items", JSON.stringify(items));
+
+    index = checks.indexOf(string.substring(0, string.length-1));
+    if(index > -1){
+      checks.splice(index, 1);
+    }
+    localStorage.setItem("checks", JSON.stringify(checks));
     }
   }
 }
@@ -254,9 +265,6 @@ $(function(){
       url: url,
       cache: true,
       success: function(result){
-        console.log("Success");
-
-        console.log(result.query.results.channel[0].item.forecast);
         //gets the forcast --> channel[1] is tomorrow channel[2] is two days (up to 9)
         var today = result.query.results.channel[0].item.forecast;
         var tomorrow = result.query.results.channel[1].item.forecast;
@@ -272,35 +280,114 @@ $(function(){
 });
 
 /******************************* Classes Script *******************************/
-//get list of classes
+//get list of classes (just the names, each course has a corresponding array of to-do list items)
 var classList = JSON.parse(localStorage.getItem("classes"));
 if(!classList){
-  classList = [[]];
+  classList = [];
 }
-/*
-//add classes and class events
-//index [i][0] is class name, [i][1] is first event [i][2] is first event due date etc
-var i = 0, j=0;
+
+//add classes
+var i;
 for(i = 0; i < classList.length; i++){
   //create the class
-  var div = document.createElement("div");
+var div = document.createElement("div");
 
-  //crate the header
-  var className = document.createElement("h3");
-  className.innerText = classList[i][0];
+  //create the header
+  var inputValue = classList[i];
+  var className = document.createElement("p");
+  className.innerText = inputValue;
+  className.className = "courseTitle";
+  div.appendChild(className);
+  div.className = "course";
+  div.id = inputValue;
 
   //create the list
   var list = document.createElement("ul");
+  list.className = "courseToDoList";
+  list.id = inputValue + "ToDoList";
+  div.appendChild(list);
 
-  //TO DO: MAKE THE LIST
-  for(j = 1; j < classList[i].length; j+=2){
-    var item = classList[i][j];
-    var date = classList[i][j+1];
+  //append the items
+  var currItems = JSON.parse(localStorage.getItem(classList[i]));
+  if(currItems){
+    var j;
+    for(j = 0; j < currItems.length; j++){
+      //create the list element and determinet the course
+      var li = document.createElement("li");
+      var course = classList[i];
+
+      //create date 
+      var dateIn = currItems[j][1];
+      var dateSpan = document.createElement("div");
+
+      var dateTxt = document.createTextNode(createDateTxt(dateIn));
+      dateSpan.className = "dateSpan";
+      dateSpan.appendChild(dateTxt);
+      li.appendChild(dateSpan);
+
+      //create item title
+      var inputValue = currItems[j][0];
+      var t = document.createTextNode(inputValue);
+      li.appendChild(t);
+      li.className = "courseToDo";
+      if (inputValue != '') {
+        var id = course + "ToDoList";
+        list.appendChild(li);
+      }
+
+      if(currItems[j][2] === true){
+        li.classList.toggle('checked');
+      }
+
+      li.onclick = function(){
+        this.classList.toggle('checked');
+        var currItems = JSON.parse(localStorage.getItem(this.parentElement.id.substring(0, this.parentElement.id.length-8)));
+        var index = 0;
+        var i;
+        for(i = 0; i < currItems.length; i++){
+          var txt = createDateTxt(currItems[i][1]) + currItems[i][0];
+          if(txt === this.innerText.substring(0, div.innerText.length-1)){
+            index = i;
+            break;
+          }
+        }
+        if(this.className === 'courseToDo checked'){
+          currItems[index][2] = true;
+        } else {
+          currItems[index][2] = false;
+        }
+        localStorage.setItem(course, JSON.stringify(currItems));
+      }
+    }
+
+    sortList(list);
+ 
   }
 
-  div.appendChild(className);
-  div.appendChild(list);
-} */
+  //create the input for new class
+  var createNew = document.createElement("div");
+  var input = document.createElement("input");
+  input.type = "text";
+  input.className = "courseInput";
+  input.id = classList[i] + "Input";
+  input.placeholder = "homework, exam, quiz..."
+  var date = document.createElement("input");
+  date.type = "date";
+  date.className = "inputDate";
+  date.id = classList[i] + "Date";
+  var btn = document.createElement("a");
+  btn.innerText = "add";
+  btn.className = "courseBtn";
+  btn.id = classList[i] + "Btn";
+  createNew.appendChild(input);
+  createNew.appendChild(date);
+  createNew.appendChild(btn);
+  div.appendChild(createNew);
+
+  //add the class
+  document.getElementById("classes").appendChild(div);
+
+}
 
 //class List click event
 var element = document.querySelector('.classButton');
@@ -341,23 +428,29 @@ for (i = 0; i < myNodelist.length; i++) {
 // Click on a close button to hide the current list item
 var courseClose = document.getElementsByClassName("closeCourseToDo");
 var i;
-console.log("Close length: " + close.length);
 for (i = 0; i < courseClose.length; i++) {
   courseClose[i].onclick = function() {
 
     //remove the element from the display
     var div = this.parentElement;
     div.style.display = "none";
-  
+
     //remove the element from the items list (storage)
-    var string = this.parentElement.innerText;
-    // edit this to remove from course info list 
-    /*
-    var index = items.indexOf(string.substring(0, string.length-1));
-    if(index > -1){
-      items.splice(index, 1);
+    //get the course name
+    var course = div.parentElement.id;
+    course = course.substring(0, course.length-8);
+   
+
+    var courseItems = JSON.parse(localStorage.getItem(course));
+    var j;
+    for(j = 0; j < courseItems.length; j++){
+      var txt = createDateTxt(courseItems[j][1]) + courseItems[j][0];
+      if(txt === div.innerText.substring(0, div.innerText.length-1)){
+        courseItems.splice(j, 1);
+        localStorage.setItem(course, JSON.stringify(courseItems));
+        break;
+      }
     }
-    localStorage.setItem("items", JSON.stringify(items));*/
   }
 }
 
@@ -367,36 +460,9 @@ var courseAdds = document.getElementsByClassName("courseBtn");
 var i;
 for (i = 0; i < courseAdds.length; i++) {
   courseAdds[i].onclick = function() {
-    var li = document.createElement("li");
-    var course = this.id.substring(0, this.id.length-3);
-    var inputID = course + "Input";
-    console.log(course);
-    console.log(inputID);
-    var inputValue = document.getElementById(inputID).value;
-    var t = document.createTextNode(inputValue);
-    li.appendChild(t);
-    li.className = "courseToDo";
-    if (inputValue != '')
-      var id = course + "toDo";
-      document.getElementById(id).appendChild(li);
-    }
-  
-    document.getElementById("myInput").value = "";
-  
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "closeCourseToDo";
-    span.appendChild(txt);
-    li.appendChild(span);
-  
-    for (i = 0; i < courseClose.length; i++) {
-      courseClose[i].onclick = function() {
-      //remove the element from the display
-      var div = this.parentElement;
-      div.style.display = "none";
-      }
-    }
+    addClassItem(this);
   }
+}
 
 
 
@@ -442,8 +508,8 @@ function addClass() {
 
   //create the list
   var list = document.createElement("ul");
-  list.className = "courseToDo";
-  list.id = inputValue + "toDo";
+  list.className = "courseToDoList";
+  list.id = inputValue + "ToDoList";
   div.appendChild(list);
 
   //create the input for new class
@@ -469,50 +535,17 @@ function addClass() {
   //add the class
   document.getElementById("classes").appendChild(div);
 
+  //add the class to local storage
+  classList.push(inputValue);
+  localStorage.setItem("classes", JSON.stringify(classList));
+
   for (i = 0; i < courseAdds.length; i++) {
     courseAdds[i].onclick = function() {
-      var li = document.createElement("li");
-      var course = this.id.substring(0, this.id.length-3);
-      var inputID = course + "Input";
-      console.log(course);
-      console.log(inputID);
-      var inputValue = document.getElementById(inputID).value;
-      var t = document.createTextNode(inputValue);
-      li.appendChild(t);
-      li.className = "courseToDo";
-      if (inputValue === '') {
-        alert("You must write something!");
-      } else {
-        var id = course + "toDo";
-        document.getElementById(id).appendChild(li);
-      }
-    
-      document.getElementById(inputID).value = "";
-
-      //create date 
-      var dateIn = document.getElementById(course + "Date").value;
-      var dateSpan = document.createElement("SPAN");
-      var dateTxt = document.createTextNode(dateIn);
-      console.log(dateIn);
-      dateSpan.className = "dateSpan";
-      li.appendChild(dateSpan);
-    
-      //create close button
-      var span = document.createElement("SPAN");
-      var txt = document.createTextNode("\u00D7");
-      span.className = "closeCourseToDo";
-      span.appendChild(txt);
-      li.appendChild(span);
-    
-      for (i = 0; i < courseClose.length; i++) {
-        courseClose[i].onclick = function() {
-        //remove the element from the display
-        var div = this.parentElement;
-        div.style.display = "none";
-        }
-      }
+      addClassItem(this);
     }
   }
+
+  //add delete button for the class
 
   //reset the input and button
   document.getElementById("classInput").value = "";
@@ -522,8 +555,127 @@ function addClass() {
 }
 
 
+function addClassItem(e) {
+  
+  //create the list element and determinet the course
+  var li = document.createElement("li");
+  var course = e.id.substring(0, e.id.length-3);
+  //create date 
+  var dateIn = document.getElementById(course + "Date").value;
+  var dateSpan = document.createElement("div");
+  var dateTxt = document.createTextNode(createDateTxt(dateIn));
+  dateSpan.className = "dateSpan";
+  dateSpan.appendChild(dateTxt);
+  li.appendChild(dateSpan);
+  document.getElementById(course + "Date").value = document.getElementById(course + "Date").defaultValue;
+  //create item title
+  var inputID = course + "Input";
+  var inputValue = document.getElementById(inputID).value;
+  var t = document.createTextNode(inputValue);
+  li.appendChild(t);
+  li.className = "courseToDo";
+  if (inputValue != '') {
+    var id = course + "ToDoList";
+    document.getElementById(id).appendChild(li);
+  }
 
+  document.getElementById(inputID).value = "";
+  //add the info to local storage
+  var classItems = JSON.parse(localStorage.getItem(course));
+  if(!classItems){
+    classItems = [];
+  }
+  classItems.push([inputValue, dateIn, false]);
 
+  localStorage.setItem(course, JSON.stringify(classItems));
+
+  //sort the list
+  sortList(document.getElementById(course+"ToDoList"));
+
+  //create close button
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "closeCourseToDo";
+  span.appendChild(txt);
+  li.appendChild(span);
+
+  for (i = 0; i < courseClose.length; i++) {
+    courseClose[i].onclick = function() {
+      //remove the element from the display
+      var div = this.parentElement;
+      div.style.display = "none";
+  
+      //remove the element from the items list (storage)
+      //get the course name
+      var course = div.parentElement.id;
+      course = course.substring(0, course.length-8);
+    
+  
+      var courseItems = JSON.parse(localStorage.getItem(course));
+      var j;
+      for(j = 0; j < courseItems.length; j++){
+        var txt = createDateTxt(courseItems[j][1]) + courseItems[j][0];
+        if(txt === div.innerText.substring(0, div.innerText.length-1)){
+          courseItems.splice(j, 1);
+          localStorage.setItem(course, JSON.stringify(courseItems));
+          break;
+        }
+      }   
+    }
+  }
+}
+
+function createDateTxt(dateIn) {
+  var mon = dateIn.substring(5, 7);
+  var day = dateIn.substring(8, dateIn.length);
+  if(day.substring(0,1) === '0'){
+    day = day.substring(1, day.length);
+  } else if(mon.substring(0,1) === '0'){
+    mon = mon.substring(1, mon.length);
+  }
+
+  return mon + "/" + day;
+}
+
+function sortList(list) {
+  var i, switching, b, shouldSwitch;
+  switching = true;
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    b = list.getElementsByTagName("LI");
+    // Loop through all list items:
+    for (i = 0; i < (b.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+
+      var date1 = b[i].getElementsByClassName("dateSpan")[0].innerText;
+      var index = date1.indexOf("/");
+      date1 = [date1.substring(0, index), date1.substring(index + 1)];
+
+      var date2 = b[i+1].getElementsByClassName("dateSpan")[0].innerText;
+      index = date2.indexOf("/");
+      date2 = [date2.substring(0, index), date2.substring(index + 1)];
+
+      /* Check if the next item should
+      switch place with the current item: */
+      if (date1[0] > date2[0] || (date1[0] === date2[0] && date1[1] > date2[1])) {
+        /* If next item is alphabetically lower than current item,
+        mark as a switch and break the loop: */
+        shouldSwitch= true;
+        break;
+      } 
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark the switch as done: */
+      b[i].parentNode.insertBefore(b[i + 1], b[i]);
+      switching = true;
+    }
+  }
+}
 
 
 

@@ -73,7 +73,7 @@ ul li.checked {
 }
 
 /* Add a "checked" mark when clicked on */
-ul li.checked::before {
+#myUL li.checked::before {
     content: '';
     position: absolute;
     border-color: #fff;
@@ -159,6 +159,8 @@ ul li.checked::before {
     font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
+    position: relative;
+    left: 30%;
 }
 
 .toDo:hover {
@@ -177,6 +179,8 @@ ul li.checked::before {
     font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
+    position: relative;
+    left: 30%;
 }
 
 .weatherButton:hover {
@@ -226,6 +230,8 @@ ul li.checked::before {
     font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
+    position: relative;
+    left: 30%;
 }
 
 .classButton:hover {
@@ -304,7 +310,7 @@ ul li.checked::before {
     font-size: 30pt;
     color: white;
     background: rgba(71, 190, 255, 0.8);
-    padding-top: 1px;
+    padding: 10px;
     margin: 1px 0px 0px 0px;
 }
 
@@ -382,4 +388,20 @@ input[type=date] {
     color: white;
 }
 
+.dateSpan {
+    width: 15%;
+    float: left;
+    margin: -12px 35px 0px 0px;
+    padding: 12px 0px 12px 0px;
+    text-align: center;
+    background: rgba(221, 221, 221, 0.8);
+}
+
+li.checked .dateSpan {
+    background: none;
+}
+
+.courseToDo{
+    padding: 12px 8px 12px 0px;
+}
 
