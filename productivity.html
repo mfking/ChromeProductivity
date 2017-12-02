@@ -5,8 +5,8 @@
         <meta charset="UTF-8">
         <meta name="description" content="A daily planner that helps you stay productive"/>
         <meta name="author" content="Meghan King and Lindsey Stuntz" />
-        <link rel="stylesheet" href="style.css" type="text/css" media="screen">
-		<!--<script type="text/javascript" src="myScript.js"></script>-->
+        <link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
 	<body>
 		<div class="row1">
@@ -14,7 +14,7 @@
 			<!-- To Do List -->
 			<div id="col" class="col">
 				<a id="toDo" class="toDo"> To Do List </a>
-				<div id="toDoList" class="toDoList">
+				<div id="toDoList" class="toDoList scale-transition scale-out">
 					<div id="myDIV" class="header">
   						<h2>My To Do List</h2>
   						<input class="todoInput" type="text" id="myInput" placeholder="to do...">
@@ -28,17 +28,25 @@
 			<div class="col">
 				<a id="weatherButton" class="weatherButton"> Weather </a>
 				<div id="weather" class="weather">
-					<div id="day1" class="forecast">
-						<h3>Today</h3>
-						<p id="day1high" class="temp"> 50&deg;</p>
+					<div id="newLocation" class="newLocation">
+						<input id="autocomplete" class="locationField" placeholder="Enter a city..." type="text"/>
 					</div>
-					<div id="day2" class="forecast">
-						<h3 id="day2Label"></h3>
-						<p class="temp"> 50&deg;</p>
+					<div id="searchBtn" class="searchBtn">
+						<i class="material-icons searchButton" id="searchButton">search</i>
 					</div>
-					<div id="day3" class="forecast">
-						<h3 id="day3Label"></h3>
-						<p class="temp"> 50&deg;</p>
+					<div id="forcastDivs" class="forecastDivs">
+						<div id="day1" class="forecast">
+							<h3>Today</h3>
+							<p id="day1high" class="temp"> 50&deg;</p>
+						</div>
+						<div id="day2" class="forecast">
+							<h3 id="day2Label"></h3>
+							<p class="temp"> 50&deg;</p>
+						</div>
+						<div id="day3" class="forecast">
+							<h3 id="day3Label"></h3>
+							<p class="temp"> 50&deg;</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -46,19 +54,98 @@
 			<!-- Classes -->
 			<div class="col">
 				<a id="classButton" class="classButton"> Classes </a>
-				<div id="classes" class="classes">
-					<div id="button" class="button">
-						<a id="addButton" class="addButton">+</a>
-					</div>
+				<div id="classWrapper" class="classWrapper">
 					<div id="addClass" class="addClass">
-						<input class="classInput" id="classInput" type="text" name="classInput" placeholder="class name...">
-						<a id="addClassBtn" class="addClassBtn">Add</a>
+						<a id="addButton" class="addButton">+</a>
+						<div id="newClass" class="newClass">
+							<input class="classInput" id="classInput" type="text" name="classInput" placeholder="class name...">
+							<a id="addClassBtn" class="addClassBtn">Add</a>
+						</div>
+						<div id="newInfo" class="newInfo">
+							<table class="days">
+								<tr class="dayLabels">
+									<td>Mon</td>
+									<td>Tue</td>
+									<td>Wed</td>
+									<td>Thur</td>
+									<td>Fri</td>
+									<td>Sat</td>
+									<td>Sun</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="checkbox" value="mon" class="checkox">
+									</td>
+									<td>
+										<input type="checkbox" value="tue" class="checkox">
+									</td>
+									<td>
+										<input type="checkbox" value="wed" class="checkox">
+									</td>
+									<td>
+										<input type="checkbox" value="thur" class="checkox">
+									</td>
+									<td>
+										<input type="checkbox" value="fri" class="checkox">
+									</td>
+									<td>
+										<input type="checkbox" value="sat" class="checkox">
+									</td>
+									<td>
+										<input type="checkbox" value="sun" class="checkox">
+									</td>
+								</tr>
+							</table>
+							<div class="timeInfo">
+								<input class="classTimeIn" id="startTimeHour" type="text" maxlength="2" placeholder="12">
+								<label>:</label>
+								<input class="classTimeIn" id="startTimeMin" type="text" maxlength="2" placeholder="00">
+								<select class="AMPM" id="startTimeAMPM">
+									<option value="AM">AM</option>
+									<option value="PM">PM</option>
+								</select>
+								<label id="to">to</label>
+								<input class="classTimeIn" id="endTimeHour" type="text" maxlength="2" placeholder="12">
+								<label>:</label>
+								<input class="classTimeIn" id="endTimeMin" type="text" maxlength="2" placeholder="00">
+								<select class="AMPM" id="endTimeAMPM">
+									<option value="AM">AM</option>
+									<option value="PM">PM</option>
+								</select>
+							</div>
+						</div>
+					</div> 
+					<div id="classes" class="classes">
 					</div>
 				</div>
 			</div>
 		</div> 
-		<h1 id="header"> Welcome </h1>
-  		<script type="text/javascript" src="jquery.min.js"></script>
-  		<script type="text/javascript" src="myScript.js"></script>
+
+		<!-- CLOCK AND HEADER -->
+		<div class="row2">
+			<div id="clock" class="clock">
+				<p id="time" class="time"></p>
+				<p id="am" class="am"></p>
+			</div>
+			<p id="header"> Welcome </p>
+		</div>
+
+		<div class="row3">
+			<!-- SCHEDULE -->
+			<div class="col">
+				<div id="schedule" class="schedule">
+				</div>
+				<a id="scheduleBtn" class="scheduleBtn"> Schedule </a>
+			</div>
+		</div>
+		<!-- PRODUCTIVITY -->
+
+
+		<!-- LOAD SCRIPTS -->
+  		<!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
+  		<script type="text/javascript" src="js/jqueryv3.2.1.min.js"></script>
+  		<script type="text/javascript" 
+  			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH87kBLMLDUxYIiHLKnICLSn0hGMcvoqU&libraries=places"></script>
+  		<script type="text/javascript" src="js/myScript.js"></script> 
 	</body>
 <html>

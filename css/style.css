@@ -2,10 +2,10 @@
 /************** GENERAL PAGE STYLING **************/
 body, html{
     /*background: lightblue; 
-  	background: -webkit-linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); 
-  	background: -o-linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); 
-  	background: -moz-linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); 
-  	background: linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); */
+    background: -webkit-linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); 
+    background: -o-linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); 
+    background: -moz-linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); 
+    background: linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); */
     background-image: "images/0.jpg";
     background-size: 100% 100%;
     height: 100%;
@@ -14,12 +14,20 @@ body, html{
 }
 
 h1 {
-	text-align: center; 
-	color: white;
+    text-align: center; 
+    color: white;
+    font-size: 40px;
+}
+
+#header{
+    text-align: center; 
+    color: white;
+    font-size: 60px; 
+    margin-top: 0px;
 }
 
 *{
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 [class*="col"] {
@@ -30,8 +38,45 @@ h1 {
     position: relative;
 }
 
-[class*="row"] {
-	height: 50%;
+.row1 {
+    height: 40%;
+}
+
+.row2, .row3{
+    height: 30%
+}
+
+.clock{
+    text-align: center;
+}
+
+.time {
+    display: inline;
+    color: white; 
+    font-size: 80px;
+}
+
+.am {
+    display: inline;
+    color: white;
+    font-size: 30px;
+}
+
+/* Transition CSS */
+.scale-transition {
+  -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.53, 0.01, 0.36, 1.63) !important;
+  transition: -webkit-transform 0.3s cubic-bezier(0.53, 0.01, 0.36, 1.63) !important;
+  transition: transform 0.3s cubic-bezier(0.53, 0.01, 0.36, 1.63) !important;
+  transition: transform 0.3s cubic-bezier(0.53, 0.01, 0.36, 1.63), -webkit-transform 0.3s cubic-bezier(0.53, 0.01, 0.36, 1.63) !important;
+}
+
+.scale-transition.scale-out {
+  -webkit-transform: scale(0);
+          transform: scale(0);
+  -webkit-transition: -webkit-transform .2s !important;
+  transition: -webkit-transform .2s !important;
+  transition: transform .2s !important;
+  transition: transform .2s, -webkit-transform .2s !important;
 }
 
 /************** To Do List Styling **************/
@@ -115,7 +160,7 @@ ul li.checked {
 }
 
 .toDoList {
-    display: none;
+    /*display: none;*/
     position: relative;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
@@ -165,6 +210,7 @@ ul li.checked {
 
 .toDo:hover {
     background: rgba(187, 187, 187, 0.4);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
 
@@ -185,16 +231,22 @@ ul li.checked {
 
 .weatherButton:hover {
     background: rgba(187, 187, 187, 0.4);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
 .forecast{
-    background-color: rgba(0, 0, 0, 0.4);
     color: white;
     text-align: center;
     width: 33.33%;
-    height: 100%;
+    height: 89%;
     float: left;
     text-align: center;
+}
+
+.forecastDivs{
+    width: 100%;
+    height: 100%;
+    float: left;
 }
 
 
@@ -208,8 +260,9 @@ ul li.checked {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     float: left;
-    width: 120%;
+    width: 100%;
     height: 275px;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .temp{
@@ -217,8 +270,31 @@ ul li.checked {
     margin: 20px 10px 10px 20px;
 }
 
+.locationField{
+    display: none;
+    border: none;
+    height: 30px;
+    font-size: 18px;
+    float: left;
+    width: 85%;
+    background: rgba(255, 255, 255, 0.8);
+}
 
-/************** Class List Styling **************/
+.searchBtn {
+    text-align: center;
+    cursor: pointer;
+    height: 30px;
+    padding-top: 3px;
+    background-color: rgba(255, 255, 255, .7);
+    width: 15%;
+    float: left;
+}
+
+.searchBtn:hover {
+    background-color: rgba(255, 255, 255, .9);
+}
+
+/**************************** Class List Styling ****************************/
 
 .classButton {
     padding: 10px;
@@ -236,9 +312,10 @@ ul li.checked {
 
 .classButton:hover {
     background: rgba(187, 187, 187, 0.4);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
-.classes {
+.classWrapper {
     display: none;
     position: relative;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -248,21 +325,25 @@ ul li.checked {
     width: 100%;
 }
 
+.classes {
+    max-height: 200%;
+    overflow-y: scroll;
+}
+
 .addClass {
-    display: none;
     min-height: 34px;
 }
 
 .addButton {
-    border-radius: 28px;
-    border: 1px solid white;
-    display: inline-block;
     cursor: pointer;
     color: #ffffff;
-    font-family: Arial;
     font-size: 16px;
-    padding: 4px 8px;
+    padding: 6px 9px 4px 9px;
     text-decoration: none;
+    width: 9%;
+    height: 34px;
+    float: left;
+    text-align: center;
 }
 
 .addButton:active {
@@ -274,24 +355,24 @@ ul li.checked {
     background: rgba(187, 187, 187, 0.4);
 }
 
-.button {
-    text-align: right;
-    padding: 3px;
+.newClass {
+    display: none;
 }
 
 .classInput {
     border: none;
     background: rgba(255, 255, 255, 0.8);
-    width: 80%;
+    width: 75%;
     padding: 8px;
     float: left;
     font-size: 16px;
+    margin-bottom: 15px;
 }
 
 
 .addClassBtn {
     padding: 8px;
-    width: 20%;
+    width: 16%;
     background: rgba(217, 217, 217, 0.8);
     color: #555;
     float: left;
@@ -305,7 +386,60 @@ ul li.checked {
     background-color: #bbb;
 }
 
+.newInfo{
+    display: none;
+}
+
+.days {
+    font-size: 15px;
+    text-align: center;
+    margin-left: 13%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.dayLabels > td {
+    color: white;
+    padding-right: 5px; 
+    padding-left: 5px;
+}
+
+.timeInfo{
+    padding-left: 12%;
+    padding-bottom: 20px;
+}
+
+.classTimeIn {
+    border: none;
+    height: 27px;
+    width: 8%;
+    font-size: 15px;
+    text-align: center;
+}
+
+.AMPM {
+    height: 27px;
+    margin-bottom: 10;
+    border: none;
+    font-size: 15px;
+    margin-left: 7px;
+}
+
+label {
+    color: white;
+    font-size: 20px;
+}
+
+#to {
+    padding: 0 15px;
+}
+
 /*styling of the courses */
+.course{
+    min-height: 101px;
+    position: relative;
+}
+
 .courseTitle {
     font-size: 30pt;
     color: white;
@@ -388,6 +522,21 @@ input[type=date] {
     color: white;
 }
 
+.deleteCourse {
+    position: absolute;
+    text-align: center;
+    font-size: 25px;
+    padding: 20px 16px 18px 20px;
+    right: 0;
+    top: 0;
+}
+
+.deleteCourse:hover {
+    color: white;
+    background-color: rgba(244, 67, 54, 1);
+    cursor: pointer;
+}
+
 .dateSpan {
     width: 15%;
     float: left;
@@ -404,4 +553,56 @@ li.checked .dateSpan {
 .courseToDo{
     padding: 12px 8px 12px 0px;
 }
+
+/**************************** Schedule Styling ****************************/
+
+.scheduleBtn {
+    padding: 10px;
+    width: 30%;
+    background: rgba(0, 0, 0, 0.4);
+    color: #FFFFFF;
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: absolute;
+    left: 30%;
+    bottom: 20px;
+}
+
+.scheduleBtn:hover {
+    background: rgba(187, 187, 187, 0.4);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.schedule {
+    display: none;
+    position: absolute;
+    box-shadow: 0px -8px 16px 0px rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+    float: left;
+    height: 50%;
+    left: 15px;
+    right: 15px;
+    bottom: 58px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

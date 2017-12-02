@@ -15,11 +15,37 @@ if(date.getHours() < 12){
   header.innerText = "Good Evening";
 }
 
+setTime();
+
+//add clock to the page
+function setTime(){
+  var date = new Date();
+  var hours = date.getHours();
+  var mins = date.getMinutes();
+  var period = "AM";
+  mins = checkTime(mins);
+  if(hours >= 12){
+    period = "PM";
+    if(hours != 12){
+      hours -= 12;
+    }
+  }
+  document.getElementById("time").innerText = hours + ":" + mins;
+  document.getElementById("am").innerText = period;
+  var t = setTimeout(setTime, 500);
+}
+
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+
 //for later usage (determining if the page has already been visited today)
 var day = date.getDate();
 var month = date.getMonth();
-var year = date.getFullYear();
+var year = date.getFullYear()
 var dateString = "" + day + month + year;
+
 
 /******************************* To Do List Script *******************************/
 var element = document.querySelector('.addBtn');
@@ -173,16 +199,37 @@ function newElement() {
 function showToDoList() {
     var list = document.getElementById("toDoList");
     var button = document.getElementById("toDo");
-    if(list.style.display == "none"){
-      list.style.display = "block";
+    list.classList.toggle("scale-out");
+    if(button.innerText === "To Do List"){
       button.innerText = "Close";
     } else {
-      list.style.display = "none";
       button.innerText = "To Do List";
     }
 }
 
 /******************************* Weather Script *******************************/
+
+var autocomplete;
+var countryRestrict = {'country': 'us'};
+
+// Create the autocomplete object and associate it with the UI input control.
+// Restrict the search to the default country, and to place type "cities".
+autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')), {
+    types: ['(cities)'],
+    componentRestrictions: countryRestrict
+  });
+
+autocomplete.addListener('place_changed', onPlaceChanged);
+
+function onPlaceChanged() {
+  var place = autocomplete.getPlace();
+  if (place.geometry) {
+    console.log("THIS PLACE: " + place.geometry.location);
+  } else {
+    document.getElementById('autocomplete').placeholder = 'Enter a city...';
+  }
+}
+
 
 //weather button click event
 var element = document.querySelector('.weatherButton');
@@ -191,6 +238,28 @@ if(element){
       showWeather();
       }, false);
 }  
+
+/* TESTING ANIMATION 
+$(document).ready(function(){
+  $('.weatherButton').click(function(){
+    $('.weather').slideToggle();
+  });
+}); */
+
+//search button
+var element = document.querySelector('.searchButton');
+if(element){
+  console.log("interset");
+  element.addEventListener("click", function(e) {
+    locationSearch();
+    }, false);
+  }
+
+function locationSearch(){
+  console.log("clcik");
+  var input = document.getElementById("autocomplete")
+  $(input).toggle(100, "linear");
+}
 
 //determine the days to display (if not done so already)
 
@@ -234,16 +303,17 @@ var year = date.getFullYear();
 var dateString = "" + day + month + year;
 localStorage.setItem("date", dateString);
 
+
 function showWeather(){
   var weather = document.getElementById("weather");
   var button = document.getElementById("weatherButton");
   if(weather.style.display == "none"){
       weather.style.display = "block";
       button.innerText = "Close";
-    } else {
+  } else {
       weather.style.display = "none";
       weatherButton.innerText = "Weather";
-    }
+  }
 } 
 
 
@@ -280,6 +350,12 @@ $(function(){
 });
 
 /******************************* Classes Script *******************************/
+
+
+//TO DO
+/* Create a menu "schedule" that displays a daily schedule and lists of all classes. Can Add meeting times 
+and then this adds it to classes list */
+
 //get list of classes (just the names, each course has a corresponding array of to-do list items)
 var classList = JSON.parse(localStorage.getItem("classes"));
 if(!classList){
@@ -289,7 +365,7 @@ if(!classList){
 //add classes
 var i;
 for(i = 0; i < classList.length; i++){
-  //create the class
+//create the class
 var div = document.createElement("div");
 
   //create the header
@@ -300,6 +376,18 @@ var div = document.createElement("div");
   div.appendChild(className);
   div.className = "course";
   div.id = inputValue;
+  if(i%2 == 0){
+    className.style.background = "rgba(71, 190, 255, 0.8)";
+  } else {
+    className.style.background = "rgba(126, 274, 136, 0.8)";
+  }
+
+  //add delete button for course
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "deleteCourse";
+  span.appendChild(txt);
+  div.appendChild(span);
 
   //create the list
   var list = document.createElement("ul");
@@ -382,6 +470,7 @@ var div = document.createElement("div");
   createNew.appendChild(input);
   createNew.appendChild(date);
   createNew.appendChild(btn);
+  createNew.style.height = "34px";
   div.appendChild(createNew);
 
   //add the class
@@ -413,6 +502,28 @@ if(element){
       }, false);
 }
 
+//delete class event
+var deleteCourse = document.getElementsByClassName("deleteCourse");
+var i;
+for(i = 0; i < deleteCourse.length; i++){
+  deleteCourse[i].onclick = function() {
+    //remove course from display
+    var div = this.parentElement;
+    div.style.display = "none";
+
+    //get course name
+    var course = div.id;
+
+    //remove course and items from local storage
+    var index = classList.indexOf(course);
+    if(index > -1){
+      classList.splice(index, 1);
+    }
+    localStorage.setItem("classes", JSON.stringify(classList));
+    localStorage.removeItem(course);
+  }
+}
+
 //delete item event
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByClassName("courseToDo");
@@ -440,7 +551,6 @@ for (i = 0; i < courseClose.length; i++) {
     var course = div.parentElement.id;
     course = course.substring(0, course.length-8);
    
-
     var courseItems = JSON.parse(localStorage.getItem(course));
     var j;
     for(j = 0; j < courseItems.length; j++){
@@ -468,30 +578,36 @@ for (i = 0; i < courseAdds.length; i++) {
 
 //function to show classes
 function showClasses(){
-  var classes = document.getElementById("classes");
+  var classes = document.getElementById("classWrapper");
   var button = document.getElementById("classButton");
   if(classes.style.display == "none"){
       classes.style.display = "block";
       button.innerText = "Close";
-    } else {
+  } else {
       classes.style.display = "none";
       button.innerText = "Classes";
-    }
+  }
+  if(classList.length == 0){
+    document.getElementById("newClass").style.display = "block";
+    document.getElementById("newInfo").style.display = "block";
+    document.getElementById("addButton").innerText = "\u00D7";
+  }
+
 } 
 
 //function to show add class
 function showAddClass(){
-  var addClass = document.getElementById("addClass");
+  var input = document.getElementById("newClass");
+  var info = document.getElementById("newInfo");
   var button = document.getElementById("addButton");
-  if(addClass.style.display == "none"){
-    addClass.style.display = "block";
-    button.innerText = "x";
-    button.style.padding = "4px 9px";
-  }else {
-      addClass.style.display = "none";
-      button.innerText = "+";
-      button.style.padding = "4px 8px";
-    }
+  $(input).toggle(100, "linear");
+  $(info).slideToggle(100, "linear");
+  if(button.innerText === "+"){
+    button.innerText = "\u00D7";
+  } else {
+    button.innerText = "+";
+  }
+
 }
 
 function addClass() {
@@ -505,6 +621,38 @@ function addClass() {
   div.appendChild(className);
   div.className = "course";
   div.id = inputValue;
+
+  if(classList.length%2 == 0){
+    className.style.background = "rgba(71, 190, 255, 0.8)";
+  } else {
+    className.style.background = "rgba(126, 274, 136, 0.8)";
+  }
+
+  //create the delete button
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "deleteCourse";
+  span.appendChild(txt);
+  div.appendChild(span);
+
+  //add delete functionality
+  span.onclick = function() {
+    //remove course from display
+    var div = this.parentElement;
+    div.style.display = "none";
+  
+    //get course name
+    var course = div.id;
+  
+    //remove course and items from local storage
+    var index = classList.indexOf(course);
+    if(index > -1){
+      classList.splice(index, 1);
+    }
+    localStorage.setItem("classes", JSON.stringify(classList));
+    localStorage.removeItem(course);
+  }
+
 
   //create the list
   var list = document.createElement("ul");
@@ -530,6 +678,7 @@ function addClass() {
   createNew.appendChild(input);
   createNew.appendChild(date);
   createNew.appendChild(btn);
+  createNew.style.height = "34px";
   div.appendChild(createNew);
 
   //add the class
@@ -545,11 +694,12 @@ function addClass() {
     }
   }
 
-  //add delete button for the class
-
   //reset the input and button
   document.getElementById("classInput").value = "";
-  document.getElementById("addClass").style.display = "none";
+  //document.getElementById("newClass").style.display = "none";
+  $("#newClass").toggle(100, "linear");
+  $("#newInfo").slideToggle(100, "linear");
+  //document.getElementById("newInfo").style.display = "none;"
   document.getElementById("addButton").innerText = "+";
   document.getElementById("addButton").style.padding = "4px 8px";
 }
@@ -574,7 +724,7 @@ function addClassItem(e) {
   var t = document.createTextNode(inputValue);
   li.appendChild(t);
   li.className = "courseToDo";
-  if (inputValue != '') {
+  if (inputValue != '' && dateIn != '') {
     var id = course + "ToDoList";
     document.getElementById(id).appendChild(li);
   }
@@ -591,6 +741,29 @@ function addClassItem(e) {
 
   //sort the list
   sortList(document.getElementById(course+"ToDoList"));
+
+  //add checked capability
+  li.onclick = function(){
+    this.classList.toggle('checked');
+    var currItems = JSON.parse(localStorage.getItem(this.parentElement.id.substring(0, this.parentElement.id.length-8)));
+    var index = -1;
+    var i;
+    for(i = 0; i < currItems.length; i++){
+      var txt = createDateTxt(currItems[i][1]) + currItems[i][0];
+      if(txt === this.innerText.substring(0, div.innerText.length-1)){
+        index = i;
+        break;
+      }
+    }
+    if(index != -1){
+      if(this.className === 'courseToDo checked'){
+        currItems[index][2] = true;
+      } else {
+        currItems[index][2] = false;
+      }
+      localStorage.setItem(course, JSON.stringify(currItems));
+    }
+  }
 
   //create close button
   var span = document.createElement("SPAN");
@@ -676,6 +849,31 @@ function sortList(list) {
     }
   }
 }
+
+/******************************* Schedule Script *******************************/
+
+
+// click event
+var element = document.querySelector('.scheduleBtn');
+if(element){
+    element.addEventListener("click", function(e) {
+      showSchedule();
+      }, false);
+}
+
+
+//function to show classes
+function showSchedule(){
+  var schedule = document.getElementById("schedule");
+  var button = document.getElementById("scheduleBtn");
+  if(schedule.style.display == "none"){
+      schedule.style.display = "block";
+      button.innerText = "Close";
+    } else {
+      schedule.style.display = "none";
+      button.innerText = "Schedule";
+    }
+} 
 
 
 
