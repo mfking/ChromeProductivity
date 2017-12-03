@@ -57,62 +57,65 @@
 				<div id="classWrapper" class="classWrapper">
 					<div id="addClass" class="addClass">
 						<a id="addButton" class="addButton">+</a>
-						<div id="newClass" class="newClass">
-							<input class="classInput" id="classInput" type="text" name="classInput" placeholder="class name...">
-							<a id="addClassBtn" class="addClassBtn">Add</a>
-						</div>
-						<div id="newInfo" class="newInfo">
-							<table class="days">
-								<tr class="dayLabels">
-									<td>Mon</td>
-									<td>Tue</td>
-									<td>Wed</td>
-									<td>Thur</td>
-									<td>Fri</td>
-									<td>Sat</td>
-									<td>Sun</td>
-								</tr>
-								<tr>
-									<td>
-										<input type="checkbox" value="mon" class="checkox">
-									</td>
-									<td>
-										<input type="checkbox" value="tue" class="checkox">
-									</td>
-									<td>
-										<input type="checkbox" value="wed" class="checkox">
-									</td>
-									<td>
-										<input type="checkbox" value="thur" class="checkox">
-									</td>
-									<td>
-										<input type="checkbox" value="fri" class="checkox">
-									</td>
-									<td>
-										<input type="checkbox" value="sat" class="checkox">
-									</td>
-									<td>
-										<input type="checkbox" value="sun" class="checkox">
-									</td>
-								</tr>
-							</table>
-							<div class="timeInfo">
-								<input class="classTimeIn" id="startTimeHour" type="text" maxlength="2" placeholder="12">
-								<label>:</label>
-								<input class="classTimeIn" id="startTimeMin" type="text" maxlength="2" placeholder="00">
-								<select class="AMPM" id="startTimeAMPM">
-									<option value="AM">AM</option>
-									<option value="PM">PM</option>
-								</select>
-								<label id="to">to</label>
-								<input class="classTimeIn" id="endTimeHour" type="text" maxlength="2" placeholder="12">
-								<label>:</label>
-								<input class="classTimeIn" id="endTimeMin" type="text" maxlength="2" placeholder="00">
-								<select class="AMPM" id="endTimeAMPM">
-									<option value="AM">AM</option>
-									<option value="PM">PM</option>
-								</select>
+						<div id="newClassWrapper">
+							<div id="newClass" class="newClass">
+								<input class="classInput" id="classInput" type="text" name="classInput" placeholder="class name...">
+								<a id="addClassBtn" class="addClassBtn">Add</a>
 							</div>
+							<div id="newInfo" class="newInfo">
+								<table class="days">
+									<tr class="dayLabels">
+										<td>Mon</td>
+										<td>Tue</td>
+										<td>Wed</td>
+										<td>Thur</td>
+										<td>Fri</td>
+										<td>Sat</td>
+										<td>Sun</td>
+									</tr>
+									<tr>
+										<td>
+											<input type="checkbox" value="mon" class="checkbox">
+										</td>
+										<td>
+											<input type="checkbox" value="tue" class="checkbox">
+										</td>
+										<td>
+											<input type="checkbox" value="wed" class="checkbox">
+										</td>
+										<td>
+											<input type="checkbox" value="thur" class="checkbox">
+										</td>
+										<td>
+											<input type="checkbox" value="fri" class="checkbox">
+										</td>
+										<td>
+											<input type="checkbox" value="sat" class="checkbox">
+										</td>
+										<td>
+											<input type="checkbox" value="sun" class="checkbox">
+										</td>
+									</tr>
+								</table>
+								<div class="timeInfo">
+									<input class="classTimeIn" id="startTimeHour" type="text" maxlength="2" placeholder="12">
+									<label>:</label>
+									<input class="classTimeIn" id="startTimeMin" type="text" maxlength="2" placeholder="00">
+									<select class="AMPM" id="startTimeAMPM">
+										<option value="AM">AM</option>
+										<option value="PM">PM</option>
+									</select>
+									<label id="to">to</label>
+									<input class="classTimeIn" id="endTimeHour" type="text" maxlength="2" placeholder="12">
+									<label>:</label>
+									<input class="classTimeIn" id="endTimeMin" type="text" maxlength="2" placeholder="00">
+									<select class="AMPM" id="endTimeAMPM">
+										<option value="AM">AM</option>
+										<option value="PM">PM</option>
+									</select>
+								</div>
+							</div>
+							<a id="addTime" class="addTime"> Add Another Meeting Time</a>
 						</div>
 					</div> 
 					<div id="classes" class="classes">

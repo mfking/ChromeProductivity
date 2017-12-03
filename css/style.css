@@ -355,10 +355,6 @@ ul li.checked {
     background: rgba(187, 187, 187, 0.4);
 }
 
-.newClass {
-    display: none;
-}
-
 .classInput {
     border: none;
     background: rgba(255, 255, 255, 0.8);
@@ -386,8 +382,13 @@ ul li.checked {
     background-color: #bbb;
 }
 
-.newInfo{
+#newClassWrapper {
+    text-align: center;
     display: none;
+}
+
+.newInfo{
+    text-align: center;
 }
 
 .days {
@@ -405,7 +406,6 @@ ul li.checked {
 }
 
 .timeInfo{
-    padding-left: 12%;
     padding-bottom: 20px;
 }
 
@@ -432,6 +432,18 @@ label {
 
 #to {
     padding: 0 15px;
+}
+
+.addTime {
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
 /*styling of the courses */

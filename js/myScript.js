@@ -249,7 +249,6 @@ $(document).ready(function(){
 //search button
 var element = document.querySelector('.searchButton');
 if(element){
-  console.log("interset");
   element.addEventListener("click", function(e) {
     locationSearch();
     }, false);
@@ -355,6 +354,8 @@ $(function(){
 //TO DO
 /* Create a menu "schedule" that displays a daily schedule and lists of all classes. Can Add meeting times 
 and then this adds it to classes list */
+
+var numMeeting = 0;
 
 //get list of classes (just the names, each course has a corresponding array of to-do list items)
 var classList = JSON.parse(localStorage.getItem("classes"));
@@ -497,9 +498,17 @@ if(element){
 //add class click event
 var element = document.querySelector('.addClassBtn');
 if(element){
-    element.addEventListener("click", function(e) {
-      addClass();
-      }, false);
+  element.addEventListener("click", function(e) {
+    addClass();   
+  }, false);
+}
+
+//add meeting time click event
+var element = document.querySelector('.addTime');
+if(element){
+  element.addEventListener("click", function(e) {
+    addMeetingTime();
+  }, false);
 }
 
 //delete class event
@@ -588,8 +597,7 @@ function showClasses(){
       button.innerText = "Classes";
   }
   if(classList.length == 0){
-    document.getElementById("newClass").style.display = "block";
-    document.getElementById("newInfo").style.display = "block";
+    document.getElementById("newClassWrapper").style.display = "block";
     document.getElementById("addButton").innerText = "\u00D7";
   }
 
@@ -597,111 +605,214 @@ function showClasses(){
 
 //function to show add class
 function showAddClass(){
-  var input = document.getElementById("newClass");
-  var info = document.getElementById("newInfo");
+  var input = document.getElementById("newClassWrapper");
+  //var info = document.getElementById("newInfo");
   var button = document.getElementById("addButton");
   $(input).toggle(100, "linear");
-  $(info).slideToggle(100, "linear");
+  //$(info).slideToggle(100, "linear");
   if(button.innerText === "+"){
     button.innerText = "\u00D7";
   } else {
     button.innerText = "+";
+    clearClassInput();
+    if(numMeeting > 0){
+      removeMeetingTimes();
+    }
   }
+}
 
+function removeMeetingTimes(){
+  var i;
+  for(i = 1; i <= numMeeting; i++){
+    var node = '#newInfo' + i;
+    $(node).remove();
+  }
+  numMeeting = 0;
+
+  var hr = document.getElementsByTagName('hr');
+  for(i = 0; i < hr.length; i++){
+    hr[i].parentNode.removeChild(hr[i]);
+  }
+}
+
+function clearClassInput(){
+  document.getElementById('classInput').value = '';
+  var boxes = document.getElementById("newInfo").getElementsByClassName('checkbox');
+  var times = document.getElementById("newInfo").getElementsByClassName('classTimeIn');
+  var ampm = document.getElementById("newInfo").getElementsByClassName('AMPM');
+  var i;
+  for(i = 0; i < boxes.length; i++){
+    boxes[i].checked = false;
+  }
+  for(i = 0; i < times.length; i++){
+    times[i].value = '';
+  }
+  for(i = 0; i < ampm.length; i++){
+    ampm[i].value = "AM";
+  }
 }
 
 function addClass() {
-  var div = document.createElement("div");
 
-  //create the header
+  //make sure there is input
+  var boxes = document.getElementById("newInfo").getElementsByClassName("checkbox");
+  var boxGood = false;
+  var i;
+  for(i = 0; i < boxes.length; i++){
+    if(boxes[i].checked){
+      boxGood = true;
+      break;
+    }
+  }
+  var times = document.getElementById("newInfo").getElementsByClassName("classTimeIn");
+  var timeGood = true;
+  for(i = 0; i < times.length; i++){
+    if(times[i].value == ''){
+      timeGood = false;
+      break;
+    }
+  }
+  //get the class name input
   var inputValue = document.getElementById("classInput").value;
-  var className = document.createElement("p");
-  className.innerText = inputValue;
-  className.className = "courseTitle";
-  div.appendChild(className);
-  div.className = "course";
-  div.id = inputValue;
 
-  if(classList.length%2 == 0){
-    className.style.background = "rgba(71, 190, 255, 0.8)";
-  } else {
-    className.style.background = "rgba(126, 274, 136, 0.8)";
-  }
+  if(inputValue != '' && boxGood && timeGood){
+    //create the class object
+    var div = document.createElement("div");
 
-  //create the delete button
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "deleteCourse";
-  span.appendChild(txt);
-  div.appendChild(span);
+    //create the header
+    var className = document.createElement("p");
+    className.innerText = inputValue;
+    className.className = "courseTitle";
+    div.appendChild(className);
+    div.className = "course";
+    div.id = inputValue;
 
-  //add delete functionality
-  span.onclick = function() {
-    //remove course from display
-    var div = this.parentElement;
-    div.style.display = "none";
-  
-    //get course name
-    var course = div.id;
-  
-    //remove course and items from local storage
-    var index = classList.indexOf(course);
-    if(index > -1){
-      classList.splice(index, 1);
+    if(classList.length%2 == 0){
+      className.style.background = "rgba(71, 190, 255, 0.8)";
+    } else {
+      className.style.background = "rgba(126, 274, 136, 0.8)";
     }
+
+    //create the delete button
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "deleteCourse";
+    span.appendChild(txt);
+    div.appendChild(span);
+
+    //add delete functionality
+    span.onclick = function() {
+      //remove course from display
+      var div = this.parentElement;
+      div.style.display = "none";
+    
+      //get course name
+      var course = div.id;
+    
+      //remove course and items from local storage
+      var index = classList.indexOf(course);
+      if(index > -1){
+        classList.splice(index, 1);
+      }
+      localStorage.setItem("classes", JSON.stringify(classList));
+      localStorage.removeItem(course);
+    }
+
+
+    //create the list
+    var list = document.createElement("ul");
+    list.className = "courseToDoList";
+    list.id = inputValue + "ToDoList";
+    div.appendChild(list);
+
+    //create the input for new class
+    var createNew = document.createElement("div");
+    var input = document.createElement("input");
+    input.type = "text";
+    input.className = "courseInput";
+    input.id = inputValue + "Input";
+    input.placeholder = "homework, exam, quiz..."
+    var date = document.createElement("input");
+    date.type = "date";
+    date.className = "inputDate";
+    date.id = inputValue + "Date";
+    var btn = document.createElement("a");
+    btn.innerText = "add";
+    btn.className = "courseBtn";
+    btn.id = inputValue + "Btn";
+    createNew.appendChild(input);
+    createNew.appendChild(date);
+    createNew.appendChild(btn);
+    createNew.style.height = "34px";
+    div.appendChild(createNew);
+
+    //add the class
+    document.getElementById("classes").appendChild(div);
+
+    //add the class to local storage
+    classList.push(inputValue);
     localStorage.setItem("classes", JSON.stringify(classList));
-    localStorage.removeItem(course);
-  }
 
-
-  //create the list
-  var list = document.createElement("ul");
-  list.className = "courseToDoList";
-  list.id = inputValue + "ToDoList";
-  div.appendChild(list);
-
-  //create the input for new class
-  var createNew = document.createElement("div");
-  var input = document.createElement("input");
-  input.type = "text";
-  input.className = "courseInput";
-  input.id = inputValue + "Input";
-  input.placeholder = "homework, exam, quiz..."
-  var date = document.createElement("input");
-  date.type = "date";
-  date.className = "inputDate";
-  date.id = inputValue + "Date";
-  var btn = document.createElement("a");
-  btn.innerText = "add";
-  btn.className = "courseBtn";
-  btn.id = inputValue + "Btn";
-  createNew.appendChild(input);
-  createNew.appendChild(date);
-  createNew.appendChild(btn);
-  createNew.style.height = "34px";
-  div.appendChild(createNew);
-
-  //add the class
-  document.getElementById("classes").appendChild(div);
-
-  //add the class to local storage
-  classList.push(inputValue);
-  localStorage.setItem("classes", JSON.stringify(classList));
-
-  for (i = 0; i < courseAdds.length; i++) {
-    courseAdds[i].onclick = function() {
-      addClassItem(this);
+    for (i = 0; i < courseAdds.length; i++) {
+      courseAdds[i].onclick = function() {
+        addClassItem(this);
+      }
     }
+
+    //add the meeting times
+    var meetingTimes = [];
+    for(i = 0; i <= numMeeting; i++){
+      var id = 'newInfo';
+      if(i > 0){
+        id = id + i;
+      }
+      var boxes = document.getElementById(id).getElementsByClassName("checkbox");
+      var times = document.getElementById(id).getElementsByClassName("classTimeIn");
+      var start = times[0].value + ":" + times[1].value + document.getElementById(id).getElementsByClassName("AMPM")[0].value;
+      var end = times[2].value + ":" + times[3].value + document.getElementById(id).getElementsByClassName("AMPM")[1].value;
+      var i = 0;
+      for(i = 0; i < boxes.length; i++){
+        if(boxes[i].checked){
+          meetingTimes.push([boxes[i].value, start, end]);
+        }
+      }
+    }
+
+    //add meeting times to local storage
+    localStorage.setItem(inputValue + "Time", JSON.stringify(meetingTimes));
+
+    //reset the button and input
+    clearClassInput();
+    removeMeetingTimes();
+    $("#newClassWrapper").toggle(100, "linear");
+    document.getElementById("addButton").innerText = "+";
+    document.getElementById("addButton").style.padding = "4px 8px";
+
+  }
+}
+
+//Adds new meeting time 
+function addMeetingTime(){
+  //add horizontal line to separate meeting times
+  var br = document.createElement('hr');
+  document.getElementById('newClassWrapper').insertBefore(br, $('#addTime')[0]);
+
+  //create the new meeting time node
+  numMeeting++;
+  var newId = 'newInfo' + numMeeting;
+  var newNode = $('#newInfo').clone().attr('id', newId)[0];
+  newNode.childNodes[1].style.marginTop = "0px";
+  var boxes = newNode.getElementsByClassName("checkbox");
+  var times = newNode.getElementsByClassName("classTimeIn");
+  var i;
+  for(i = 0; i < boxes.length; i++){
+    boxes[i].checked = false;
+  }
+  for(i = 0; i < times.length; i++){
+    times[i].value = '';
   }
 
-  //reset the input and button
-  document.getElementById("classInput").value = "";
-  //document.getElementById("newClass").style.display = "none";
-  $("#newClass").toggle(100, "linear");
-  $("#newInfo").slideToggle(100, "linear");
-  //document.getElementById("newInfo").style.display = "none;"
-  document.getElementById("addButton").innerText = "+";
-  document.getElementById("addButton").style.padding = "4px 8px";
+  document.getElementById('newClassWrapper').insertBefore(newNode, $('#addTime')[0]);
 }
 
 
@@ -861,6 +972,61 @@ if(element){
       }, false);
 }
 
+//add the classes based on the day of the week
+var date = new Date();
+var day = date.getDay();
+var i;
+for(i = 0; i < classList.length; i++){
+  var times = JSON.parse(localStorage.getItem(classList[i] + "Time"));
+  var j;
+  for(j = 0; j < times.length; j++){
+    if(dayStringToNum(times[j][0]) == day){
+      //create a element for the schedule
+      var div = document.createElement("div");
+      div.id = classList[i] + "SchedNode";
+      div.class = "SchedNode";
+
+      //text
+      var label = document.createElement("p");
+      label.innerText = classList[i];
+      div.appendChild(label);
+
+      //time
+
+      //add to schedule
+      document.getElementById('schedule').appendChild(div);
+    }
+  }
+}
+
+function dayStringToNum(day){
+  var num;
+  switch(day){
+    case "sun":
+      num = 0;
+      break;
+    case "mon":
+      num = 1;
+      break;
+    case "tue":
+      num = 2;
+      break;
+    case "wed":
+      num = 3;
+      break;
+    case "thur":
+      num = 4;
+      break;
+    case "fri":
+      num = 5;
+      break;
+    case "sat":
+      num = 6;
+      break; 
+  }
+  return num;
+}
+
 
 //function to show classes
 function showSchedule(){
@@ -874,6 +1040,7 @@ function showSchedule(){
       button.innerText = "Schedule";
     }
 } 
+
 
 
 
