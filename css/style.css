@@ -261,8 +261,9 @@ ul li.checked {
     z-index: 1;
     float: left;
     width: 100%;
-    height: 275px;
+    /*height: 275px;*/
     background-color: rgba(0, 0, 0, 0.6);
+    text-align: center;
 }
 
 .temp{
@@ -285,6 +286,7 @@ ul li.checked {
     background: rgba(255, 255, 255, 0.8);
 }
 
+
 .searchBtn {
     text-align: center;
     cursor: pointer;
@@ -297,6 +299,16 @@ ul li.checked {
 
 .searchBtn:hover {
     background-color: rgba(255, 255, 255, .9);
+}
+
+.locationTag {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    margin: 0;
+    left: 15%;
+    right: 15%;
+    margin-top: 5px;
 }
 
 /**************************** Class List Styling ****************************/
@@ -351,10 +363,6 @@ ul li.checked {
     text-align: center;
 }
 
-.addButton:active {
-    position:relative;
-    top:1px;
-}
 
 .addButton:hover{
     background: rgba(187, 187, 187, 0.4);

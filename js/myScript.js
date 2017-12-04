@@ -211,6 +211,15 @@ function showToDoList() {
 
 var autocomplete;
 var countryRestrict = {'country': 'us'};
+var weatherLocation = localStorage.getItem("weatherLocation");
+if(!weatherLocation){
+  weatherLocation = "";
+} else {
+  document.getElementById('locationTag').innerText = weatherLocation;
+}
+var lat;
+var long;
+
 
 // Create the autocomplete object and associate it with the UI input control.
 // Restrict the search to the default country, and to place type "cities".
@@ -224,10 +233,19 @@ autocomplete.addListener('place_changed', onPlaceChanged);
 function onPlaceChanged() {
   var place = autocomplete.getPlace();
   if (place.geometry) {
-    console.log("THIS PLACE: " + place.geometry.location);
-  } else {
-    document.getElementById('autocomplete').placeholder = 'Enter a city...';
-  }
+    var index = place.formatted_address.indexOf(",");
+    document.getElementById('locationTag').innerText = place.formatted_address.substring(0, index+4);
+    localStorage.setItem("weatherLocation", document.getElementById('locationTag').innerText);
+    $('#locationTag').toggle(100, "linear");
+    $('#autocomplete').toggle(100, "linear");
+
+    lat = place.geometry.location.lat();
+    long = place.geometry.location.lng();
+
+    //call weather function
+    getWeather();
+  } 
+  document.getElementById('autocomplete').value = '';
 }
 
 
@@ -239,15 +257,9 @@ if(element){
       }, false);
 }  
 
-/* TESTING ANIMATION 
-$(document).ready(function(){
-  $('.weatherButton').click(function(){
-    $('.weather').slideToggle();
-  });
-}); */
 
 //search button
-var element = document.querySelector('.searchButton');
+var element = document.querySelector('.searchBtn');
 if(element){
   element.addEventListener("click", function(e) {
     locationSearch();
@@ -255,13 +267,12 @@ if(element){
   }
 
 function locationSearch(){
-  console.log("clcik");
   var input = document.getElementById("autocomplete")
   $(input).toggle(100, "linear");
+  $('.locationTag').toggle(100, "linear");
 }
 
 //determine the days to display (if not done so already)
-
 var tomorrow = document.getElementById("day2Label");
 var twoDays = document.getElementById("day3Label");
 
@@ -312,51 +323,59 @@ function showWeather(){
   } else {
       weatherButton.innerText = "Weather";
   }
+  if(weatherLocation === ""){
+    document.getElementById("forcastDivs").style.display = "none";
+    locationSearch();
+  }
 } 
 
+$(function(){
+    if(weatherLocation != ""){
+      getWeather();
+    }
+});
 
 //function to call yahoo API to get and display weather information (should probably only call this a few times a day not
 //every time a tab opens --> will look into this)
-$(function(){
+function getWeather(){
+  // Specify the ZIP/location code and units (f or c)
+  var loc = '05401';
+  var u = 'f';
  
-    // Specify the ZIP/location code and units (f or c)
-    var loc = '05401'; // or e.g. SPXX0050
-    var u = 'f';
- 
-    var query = "SELECT item.forecast FROM weather.forecast WHERE woeid in (select woeid from geo.places(1) where text='" + loc + "' and country='United States') AND u='" + u + "'";
-    var cacheBuster = Math.floor((new Date().getTime()) / 1200 / 1000);
-    var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + '&format=json&_nocache=' + cacheBuster;
+  var query = "SELECT item.forecast FROM weather.forecast WHERE woeid in (select woeid from geo.places(1) where text='" + loc + "' and country='United States') AND u='" + u + "'";
+  var cacheBuster = Math.floor((new Date().getTime()) / 1200 / 1000);
+  var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + '&format=json&_nocache=' + cacheBuster;
 
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: url,
-      cache: true,
-      success: function(result){
-        //gets the forcast --> channel[1] is tomorrow channel[2] is two days (up to 9)
-        var today = result.query.results.channel[0].item.forecast;
-        var tomorrow = result.query.results.channel[1].item.forecast;
-        var twoDays = result.query.results.channel[2].item.forecast;
+  $.ajax({
+    type: 'POST',
+    dataType: 'json',
+    url: url,
+    cache: true,
+    success: function(result){
+      //gets the forcast --> channel[1] is tomorrow channel[2] is two days (up to 9)
+      var today = result.query.results.channel[0].item.forecast;
+      var tomorrow = result.query.results.channel[1].item.forecast;
+      var twoDays = result.query.results.channel[2].item.forecast;
 
-        //set high temp
-        document.getElementById("day1high").innerText = today.high + "\xB0";
-        document.getElementById("day2high").innerText = tomorrow.high + "\xB0";
-        document.getElementById("day3high").innerText = twoDays.high + "\xB0";
+      //set high temp
+      document.getElementById("day1high").innerText = today.high + "\xB0";
+      document.getElementById("day2high").innerText = tomorrow.high + "\xB0";
+      document.getElementById("day3high").innerText = twoDays.high + "\xB0";
 
-        //set low temp
-        document.getElementById("day1low").innerText = today.low + "\xB0";
-        document.getElementById("day2low").innerText = tomorrow.low + "\xB0";
-        document.getElementById("day3low").innerText = twoDays.low + "\xB0";
+      //set low temp
+      document.getElementById("day1low").innerText = today.low + "\xB0";
+      document.getElementById("day2low").innerText = tomorrow.low + "\xB0";
+      document.getElementById("day3low").innerText = twoDays.low + "\xB0";
 
 
 
-        $('#day1icon').append('<img src="images/' + getWeatherImage(today.code) + '" width="75" height="75" title="' + today.text + '" />');
-        $('#day2icon').append('<img src="images/' + getWeatherImage(tomorrow.code) + '" width="75" height="75" title="' + tomorrow.text + '" />');
-        $('#day3icon').append('<img src="images/' + getWeatherImage(twoDays.code) + '" width="75" height="75" title="' + twoDays.text + '" />');
-        //TO DO: IMPLEMENT GETTING/ DISPLAYING ALL DESIRED WEATHER INFO
-      }
-    });    
-});
+      $('#day1icon').append('<img src="images/' + getWeatherImage(today.code) + '" width="75" height="75" title="' + today.text + '" />');
+      $('#day2icon').append('<img src="images/' + getWeatherImage(tomorrow.code) + '" width="75" height="75" title="' + tomorrow.text + '" />');
+      $('#day3icon').append('<img src="images/' + getWeatherImage(twoDays.code) + '" width="75" height="75" title="' + twoDays.text + '" />');
+      //TO DO: IMPLEMENT GETTING/ DISPLAYING ALL DESIRED WEATHER INFO
+    }
+  });
+}
 
 function getWeatherImage(code){
   console.log(code);
@@ -717,7 +736,7 @@ function showAddClass(){
   var input = document.getElementById("newClassWrapper");
   //var info = document.getElementById("newInfo");
   var button = document.getElementById("addButton");
-  $(input).toggle(100, "linear");
+  $(input).toggle(200, "linear");
   //$(info).slideToggle(100, "linear");
   if(button.innerText === "+"){
     button.innerText = "\u00D7";
