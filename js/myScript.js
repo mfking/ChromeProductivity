@@ -199,7 +199,7 @@ function newElement() {
 function showToDoList() {
     var list = document.getElementById("toDoList");
     var button = document.getElementById("toDo");
-    list.classList.toggle("scale-out");
+    $(list).slideToggle();
     if(button.innerText === "To Do List"){
       button.innerText = "Close";
     } else {
@@ -306,11 +306,10 @@ localStorage.setItem("date", dateString);
 function showWeather(){
   var weather = document.getElementById("weather");
   var button = document.getElementById("weatherButton");
-  if(weather.style.display == "none"){
-      weather.style.display = "block";
+  $(weather).slideToggle();
+  if(button.innerText == "Weather"){
       button.innerText = "Close";
   } else {
-      weather.style.display = "none";
       weatherButton.innerText = "Weather";
   }
 } 
@@ -321,7 +320,7 @@ function showWeather(){
 $(function(){
  
     // Specify the ZIP/location code and units (f or c)
-    var loc = '02481'; // or e.g. SPXX0050
+    var loc = '05401'; // or e.g. SPXX0050
     var u = 'f';
  
     var query = "SELECT item.forecast FROM weather.forecast WHERE woeid in (select woeid from geo.places(1) where text='" + loc + "' and country='United States') AND u='" + u + "'";
@@ -339,17 +338,73 @@ $(function(){
         var tomorrow = result.query.results.channel[1].item.forecast;
         var twoDays = result.query.results.channel[2].item.forecast;
 
+        //set high temp
         document.getElementById("day1high").innerText = today.high + "\xB0";
-        var day2 = document.getElementById("day2");
-        var day3 = document.getElementById("day3");
+        document.getElementById("day2high").innerText = tomorrow.high + "\xB0";
+        document.getElementById("day3high").innerText = twoDays.high + "\xB0";
 
+        //set low temp
+        document.getElementById("day1low").innerText = today.low + "\xB0";
+        document.getElementById("day2low").innerText = tomorrow.low + "\xB0";
+        document.getElementById("day3low").innerText = twoDays.low + "\xB0";
+
+
+
+        $('#day1icon').append('<img src="images/' + getWeatherImage(today.code) + '" width="75" height="75" title="' + today.text + '" />');
+        $('#day2icon').append('<img src="images/' + getWeatherImage(tomorrow.code) + '" width="75" height="75" title="' + tomorrow.text + '" />');
+        $('#day3icon').append('<img src="images/' + getWeatherImage(twoDays.code) + '" width="75" height="75" title="' + twoDays.text + '" />');
         //TO DO: IMPLEMENT GETTING/ DISPLAYING ALL DESIRED WEATHER INFO
       }
     });    
 });
 
-/******************************* Classes Script *******************************/
+function getWeatherImage(code){
+  console.log(code);
+  var img = "";
+  switch(parseInt(code)){
+    case 0: case 1: case 2:
+      img = "rainStorm.png";
+      break;
+    case 3: case 4: case 37: case 38: case 39: case 45: case 47:
+      img = "thunderstorm.png";
+      break;
+    case 5: case 6: case 7: case 35:
+      img = "winteryMix.png";
+      break;
+    case 8: case 9: case 10: case 11: case 12: case 40:
+      img = "rain.png";
+      break;
+    case 13: case 14: case 15: case 16: case 17: case 18: case 41: case 42: case 43: case 46:
+      img = "snow.png";
+      break;
+    case 19: case 20: case 21: case 22:
+      img = "fog.png";
+      break;
+    case 23: case 24:
+      img = "windy.png";
+      break;
+    case 25: case 26:
+      img = "cloudy.png";
+      break;
+    case 27: case 29:
+      img = "partltCloudy.png";
+      break;
+    case 28: case 30: case 44: case 3200:
+      img = "partlySunny.png";
+      break;
+    case 31: case 33:
+      img = "clear.png";
+      break;
+    case 32: case 34: case 36:
+      img = "sunny.png";
+      break;
+  }
+  console.log(img);
+  return img;
+}
 
+/******************************* Classes Script *******************************/
+$('.simple_color').simpleColor();
 
 //TO DO
 /* Create a menu "schedule" that displays a daily schedule and lists of all classes. Can Add meeting times 
@@ -377,11 +432,9 @@ var div = document.createElement("div");
   div.appendChild(className);
   div.className = "course";
   div.id = inputValue;
-  if(i%2 == 0){
-    className.style.background = "rgba(71, 190, 255, 0.8)";
-  } else {
-    className.style.background = "rgba(126, 274, 136, 0.8)";
-  }
+
+  //add class color
+  className.style.background = localStorage.getItem(inputValue + "Color");
 
   //add delete button for course
   var span = document.createElement("SPAN");
@@ -511,6 +564,63 @@ if(element){
   }, false);
 }
 
+//make sure input is not letters
+$('#startTimeHour').focusout(function() {
+    if(!isNaN(this.value)){
+      var time = parseInt(this.value);
+      if(time > 12){
+        this.value = "12";
+      } else if(time < 1){
+        this.value = "1";
+      }
+    } else {
+      this.value = '';
+    }
+});
+
+$('#endTimeHour').focusout(function() {
+    if(!isNaN(this.value)){
+      var time = parseInt(this.value);
+      if(time > 12){
+        this.value = "12";
+      } else if(time < 1){
+        this.value = "1";
+      }
+    } else {
+      this.value = '';
+    }
+});
+
+$('#startTimeMin').focusout(function() {
+    if(!isNaN(this.value)){
+      var time = parseInt(this.value);
+      if(time > 59){
+        this.value = "59";
+      } else if(time < 0){
+        this.value = "00";
+      } else if(time < 10){
+        this.value = "0" + time;
+      }
+    } else {
+      this.value = '';
+    }
+});
+
+$('#endTimeMin').focusout(function() {
+    if(!isNaN(this.value)){
+      var time = parseInt(this.value);
+      if(time > 59){
+        this.value = "59";
+      } else if(time < 0){
+        this.value = "00";
+      } else if(time < 10){
+        this.value = "0" + time;
+      }
+    } else {
+      this.value = '';
+    }
+});
+
 //delete class event
 var deleteCourse = document.getElementsByClassName("deleteCourse");
 var i;
@@ -589,11 +699,10 @@ for (i = 0; i < courseAdds.length; i++) {
 function showClasses(){
   var classes = document.getElementById("classWrapper");
   var button = document.getElementById("classButton");
-  if(classes.style.display == "none"){
-      classes.style.display = "block";
+  $(classes).slideToggle();
+  if(button.innerText === "Classes"){
       button.innerText = "Close";
   } else {
-      classes.style.display = "none";
       button.innerText = "Classes";
   }
   if(classList.length == 0){
@@ -630,7 +739,7 @@ function removeMeetingTimes(){
   numMeeting = 0;
 
   var hr = document.getElementsByTagName('hr');
-  for(i = 0; i < hr.length; i++){
+  for(i = 0; i < hr.length; ){
     hr[i].parentNode.removeChild(hr[i]);
   }
 }
@@ -687,12 +796,14 @@ function addClass() {
     div.className = "course";
     div.id = inputValue;
 
-    if(classList.length%2 == 0){
-      className.style.background = "rgba(71, 190, 255, 0.8)";
-    } else {
-      className.style.background = "rgba(126, 274, 136, 0.8)";
-    }
 
+    className.style.background = document.getElementsByClassName('simpleColorDisplay')[0].style.backgroundColor;
+    var color = className.style.background;
+    color = color.replace(')', ', 0.8)').replace('rgb', 'rgba');
+    className.style.background = color;
+
+    localStorage.setItem(inputValue + "Color", color);
+    
     //create the delete button
     var span = document.createElement("SPAN");
     var txt = document.createTextNode("\u00D7");
@@ -795,7 +906,7 @@ function addClass() {
 function addMeetingTime(){
   //add horizontal line to separate meeting times
   var br = document.createElement('hr');
-  document.getElementById('newClassWrapper').insertBefore(br, $('#addTime')[0]);
+  document.getElementById('newClassWrapper').insertBefore(br, $('.colorLabel')[0]);
 
   //create the new meeting time node
   numMeeting++;
@@ -812,7 +923,7 @@ function addMeetingTime(){
     times[i].value = '';
   }
 
-  document.getElementById('newClassWrapper').insertBefore(newNode, $('#addTime')[0]);
+  document.getElementById('newClassWrapper').insertBefore(newNode, $('.colorLabel')[0]);
 }
 
 
@@ -982,22 +1093,33 @@ for(i = 0; i < classList.length; i++){
   for(j = 0; j < times.length; j++){
     if(dayStringToNum(times[j][0]) == day){
       //create a element for the schedule
-      var div = document.createElement("div");
+      var div = document.createElement("li");
       div.id = classList[i] + "SchedNode";
-      div.class = "SchedNode";
+      div.className = "schedNode";
+      div.style.background = localStorage.getItem(classList[i] + "Color");
 
       //text
       var label = document.createElement("p");
       label.innerText = classList[i];
+      label.className = "classLabel";
       div.appendChild(label);
 
       //time
+      var time = document.createElement("p");
+      time.innerText = times[j][1].substring(0, times[j][1].length - 2) + " to " + times[j][2].substring(0, times[j][2].length - 2);
+      time.className = "classTime";
+      if(times[j][1].substring(times[j][1].length - 2) === 'PM'){
+        time.classList.toggle("PM");
+      }
+      div.appendChild(time);
 
       //add to schedule
       document.getElementById('schedule').appendChild(div);
     }
   }
 }
+
+sortSched(document.getElementById('schedule'));
 
 function dayStringToNum(day){
   var num;
@@ -1032,18 +1154,79 @@ function dayStringToNum(day){
 function showSchedule(){
   var schedule = document.getElementById("schedule");
   var button = document.getElementById("scheduleBtn");
-  if(schedule.style.display == "none"){
-      schedule.style.display = "block";
-      button.innerText = "Close";
-    } else {
-      schedule.style.display = "none";
-      button.innerText = "Schedule";
-    }
+  $(schedule).slideToggle();
+  if(button.innerText == 'Today'){
+    button.innerText = 'Close';
+  } else {
+    button.innerText = 'Today';
+  }
 } 
 
+function addToSchedule(){
 
+}
 
+function sortSched(list){
+  var i, switching, b, shouldSwitch;
+  switching = true;
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    b = list.getElementsByTagName("LI");
+    // Loop through all list items:
+    //debugger;
+    for (i = 0; i < (b.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
 
+      var time = b[i].getElementsByClassName("classTime")[0];
+      var time1 = time.innerText;
+      var index = time1.indexOf("to");
+      time1 = time1.substring(0, index-1);
+      index = time1.indexOf(":");
+      var hours1 = parseInt(time1.substring(0, index));
+      var mins1 = parseInt(time1.substring(index+1));
+
+      if(time.className.indexOf("PM") != -1){
+        if(hours1 < 12){
+          hours1 = hours1 + 12;
+        }
+      }
+
+      time = b[i+1].getElementsByClassName("classTime")[0];
+      var time2 = time.innerText;
+      var index = time2.indexOf("to");
+      time2 = time2.substring(0, index-1);
+      index = time2.indexOf(":");
+      var hours2 = parseInt(time2.substring(0, index));
+      var mins2 = parseInt(time2.substring(index+1));
+
+      if(time.className.indexOf("PM") != -1){
+        if(hours2 < 12){
+          hours2 += 12;
+          console.log(hours2);
+        }
+      }
+
+      /* Check if the next item should
+      switch place with the current item: */
+      if (hours1 > hours2 || (hours1 === hours2 && mins1 > mins2)) {
+        /* If next item is alphabetically lower than current item,
+        mark as a switch and break the loop: */
+        shouldSwitch= true;
+        break;
+      } 
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark the switch as done: */
+      b[i].parentNode.insertBefore(b[i + 1], b[i]);
+      switching = true;
+    }
+  }
+}
 
 
 

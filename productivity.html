@@ -14,7 +14,7 @@
 			<!-- To Do List -->
 			<div id="col" class="col">
 				<a id="toDo" class="toDo"> To Do List </a>
-				<div id="toDoList" class="toDoList scale-transition scale-out">
+				<div id="toDoList" class="toDoList">
 					<div id="myDIV" class="header">
   						<h2>My To Do List</h2>
   						<input class="todoInput" type="text" id="myInput" placeholder="to do...">
@@ -38,14 +38,20 @@
 						<div id="day1" class="forecast">
 							<h3>Today</h3>
 							<p id="day1high" class="temp"> 50&deg;</p>
+							<p id="day1low" class="low">50&deg;</p>
+							<span id="day1icon" class="icon"></span>
 						</div>
 						<div id="day2" class="forecast">
 							<h3 id="day2Label"></h3>
-							<p class="temp"> 50&deg;</p>
+							<p id="day2high" class="temp"> 50&deg;</p>
+							<p id="day2low" class="low"> 50&deg;</p>
+							<span id="day2icon" class="icon"></span>
 						</div>
 						<div id="day3" class="forecast">
 							<h3 id="day3Label"></h3>
-							<p class="temp"> 50&deg;</p>
+							<p id="day3high" class="temp"> 50&deg;</p>
+							<p id="day3low" class="low"> 50&deg;</p>
+							<span id="day3icon" class="icon"></span>
 						</div>
 					</div>
 				</div>
@@ -98,23 +104,26 @@
 									</tr>
 								</table>
 								<div class="timeInfo">
-									<input class="classTimeIn" id="startTimeHour" type="text" maxlength="2" placeholder="12">
+									<input class="classTimeIn hour" id="startTimeHour" type="text" maxlength="2" placeholder="12">
 									<label>:</label>
-									<input class="classTimeIn" id="startTimeMin" type="text" maxlength="2" placeholder="00">
+									<input class="classTimeIn min" id="startTimeMin" type="text" maxlength="2" placeholder="00">
 									<select class="AMPM" id="startTimeAMPM">
 										<option value="AM">AM</option>
 										<option value="PM">PM</option>
 									</select>
 									<label id="to">to</label>
-									<input class="classTimeIn" id="endTimeHour" type="text" maxlength="2" placeholder="12">
+									<input class="classTimeIn hour" id="endTimeHour" type="text" maxlength="2" placeholder="12">
 									<label>:</label>
-									<input class="classTimeIn" id="endTimeMin" type="text" maxlength="2" placeholder="00">
+									<input class="classTimeIn min" id="endTimeMin" type="text" maxlength="2" placeholder="00">
 									<select class="AMPM" id="endTimeAMPM">
 										<option value="AM">AM</option>
 										<option value="PM">PM</option>
 									</select>
 								</div>
 							</div>
+							<a class="colorLabel">Color:</a>
+							<input class='simple_color' id="colorInput" value='#47BEFF'/>
+							<br><br>
 							<a id="addTime" class="addTime"> Add Another Meeting Time</a>
 						</div>
 					</div> 
@@ -136,9 +145,9 @@
 		<div class="row3">
 			<!-- SCHEDULE -->
 			<div class="col">
-				<div id="schedule" class="schedule">
-				</div>
-				<a id="scheduleBtn" class="scheduleBtn"> Schedule </a>
+				<ul id="schedule" class="schedule">
+				</ul>
+				<a id="scheduleBtn" class="scheduleBtn"> Today </a>
 			</div>
 		</div>
 		<!-- PRODUCTIVITY -->
@@ -147,6 +156,7 @@
 		<!-- LOAD SCRIPTS -->
   		<!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
   		<script type="text/javascript" src="js/jqueryv3.2.1.min.js"></script>
+  		<script type="text/javascript" src="js/jquery.simple-color.js"></script>
   		<script type="text/javascript" 
   			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH87kBLMLDUxYIiHLKnICLSn0hGMcvoqU&libraries=places"></script>
   		<script type="text/javascript" src="js/myScript.js"></script> 
