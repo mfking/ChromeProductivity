@@ -1256,6 +1256,29 @@ function sortSched(list){
 }
 
 
+/******************************* Productivity Script *******************************/
+
+
+// click event
+var element = document.querySelector('.prodBtn');
+if(element){
+    element.addEventListener("click", function(e) {
+      showProductivity();
+      }, false);
+}
+
+//function to show productivity data
+function showProductivity(){
+  var schedule = document.getElementById("prod");
+  var button = document.getElementById("prodBtn");
+  $(schedule).slideToggle();
+  if(button.innerText == 'Productivity'){
+    button.innerText = 'Close';
+  } else {
+    button.innerText = 'Productivity';
+  }
+}
+
 
 
 
