@@ -211,14 +211,16 @@ function showToDoList() {
 
 var autocomplete;
 var countryRestrict = {'country': 'us'};
-var weatherLocation = localStorage.getItem("weatherLocation");
-if(!weatherLocation){
-  weatherLocation = "";
-} else {
-  document.getElementById('locationTag').innerText = weatherLocation;
-}
 var lat;
 var long;
+var weatherLocation = JSON.parse(localStorage.getItem("weatherLocation"));
+if(!weatherLocation){
+  weatherLocation = [];
+} else {
+  document.getElementById('locationTag').innerText = weatherLocation[0];
+  lat = weatherLocation[1];
+  long = weatherLocation[2];
+}
 
 
 // Create the autocomplete object and associate it with the UI input control.
@@ -235,13 +237,18 @@ function onPlaceChanged() {
   if (place.geometry) {
     var index = place.formatted_address.indexOf(",");
     document.getElementById('locationTag').innerText = place.formatted_address.substring(0, index+4);
-    localStorage.setItem("weatherLocation", document.getElementById('locationTag').innerText);
     $('#locationTag').toggle(100, "linear");
     $('#autocomplete').toggle(100, "linear");
 
     lat = place.geometry.location.lat();
     long = place.geometry.location.lng();
 
+    weatherLocation = [document.getElementById('locationTag').innerText, lat, long];
+    localStorage.setItem("weatherLocation", JSON.stringify(weatherLocation));
+
+    if(document.getElementById("forcastDivs").style.display === "none"){
+      document.getElementById("forcastDivs").style.display = "block";
+    }
     //call weather function
     getWeather();
   } 
@@ -323,14 +330,14 @@ function showWeather(){
   } else {
       weatherButton.innerText = "Weather";
   }
-  if(weatherLocation === ""){
+  if(weatherLocation.length == 0){
     document.getElementById("forcastDivs").style.display = "none";
     locationSearch();
   }
 } 
 
 $(function(){
-    if(weatherLocation != ""){
+    if(weatherLocation.length > 0){
       getWeather();
     }
 });
@@ -341,8 +348,8 @@ function getWeather(){
   // Specify the ZIP/location code and units (f or c)
   var loc = '05401';
   var u = 'f';
- 
-  var query = "SELECT item.forecast FROM weather.forecast WHERE woeid in (select woeid from geo.places(1) where text='" + loc + "' and country='United States') AND u='" + u + "'";
+
+  var query = "SELECT item.forecast FROM weather.forecast WHERE woeid in (select woeid from geo.places(1) where text='(" + lat + ", " + long + ")') AND u='" + u + "'";
   var cacheBuster = Math.floor((new Date().getTime()) / 1200 / 1000);
   var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + '&format=json&_nocache=' + cacheBuster;
 
@@ -367,12 +374,12 @@ function getWeather(){
       document.getElementById("day2low").innerText = tomorrow.low + "\xB0";
       document.getElementById("day3low").innerText = twoDays.low + "\xB0";
 
-
-
-      $('#day1icon').append('<img src="images/' + getWeatherImage(today.code) + '" width="75" height="75" title="' + today.text + '" />');
-      $('#day2icon').append('<img src="images/' + getWeatherImage(tomorrow.code) + '" width="75" height="75" title="' + tomorrow.text + '" />');
-      $('#day3icon').append('<img src="images/' + getWeatherImage(twoDays.code) + '" width="75" height="75" title="' + twoDays.text + '" />');
+      //set image
+      document.getElementById('day1icon').src = "images/" + getWeatherImage(today.code);
+      document.getElementById('day2icon').src = "images/" + getWeatherImage(tomorrow.code);
+      document.getElementById('day3icon').src = "images/" + getWeatherImage(twoDays.code);
       //TO DO: IMPLEMENT GETTING/ DISPLAYING ALL DESIRED WEATHER INFO
+
     }
   });
 }
