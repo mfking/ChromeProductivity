@@ -4,7 +4,6 @@
 var num = Math.floor(Math.random() * 6);
 var url = "url('images/" + num + ".jpg')";
 document.body.style.backgroundImage = url;
-console.log('hi');
 
 var header = document.getElementById("header");
 var date = new Date();
@@ -30,6 +29,9 @@ function setTime(){
     if(hours != 12){
       hours -= 12;
     }
+  }
+  if(hours == 0){
+    hours = 12;
   }
   document.getElementById("time").innerText = hours + ":" + mins;
   document.getElementById("am").innerText = period;
