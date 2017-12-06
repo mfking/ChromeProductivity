@@ -94,6 +94,7 @@ for(i = 0; i < items.length; i++){
   }
 }
 
+
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByClassName("toDoItem");
 var i;
@@ -1062,6 +1063,7 @@ function createDateTxt(dateIn) {
 }
 
 function sortList(list) {
+  console.log("sorting");
   var i, switching, b, shouldSwitch;
   switching = true;
   /* Make a loop that will continue until
@@ -1077,11 +1079,11 @@ function sortList(list) {
 
       var date1 = b[i].getElementsByClassName("dateSpan")[0].innerText;
       var index = date1.indexOf("/");
-      date1 = [date1.substring(0, index), date1.substring(index + 1)];
+      date1 = [parseInt(date1.substring(0, index)), parseInt(date1.substring(index + 1))];
 
       var date2 = b[i+1].getElementsByClassName("dateSpan")[0].innerText;
       index = date2.indexOf("/");
-      date2 = [date2.substring(0, index), date2.substring(index + 1)];
+      date2 = [parseInt(date2.substring(0, index)), parseInt(date2.substring(index + 1))];
 
       /* Check if the next item should
       switch place with the current item: */
@@ -1281,7 +1283,8 @@ function showProductivity(){
   }
 }
 
-
+/******************************* Notifications Script *******************************/
+chrome.alarms.create("alarm", {delayInMinutes: 1, periodInMinutes: 120});
 
 
 

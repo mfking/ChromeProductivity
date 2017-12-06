@@ -16,8 +16,15 @@
     "128": "images/icon.png"
  },
 
+ "background": {
+      "scripts": ["js/jqueryv3.2.1.min.js", "js/background.js"]
+  },
+
  "permissions": [
-    "history"
+    "history", 
+    "background", 
+    "alarms", 
+    "notifications"
   ],
 
   "chrome_url_overrides" : {
