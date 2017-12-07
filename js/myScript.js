@@ -1327,7 +1327,6 @@ function sortSched(list){
 currClass();
 
 function currClass(){
-  console.log("here");
   var date = new Date();
   var classes = document.getElementsByClassName('schedNode');
   var i;
@@ -1344,8 +1343,6 @@ function currClass(){
     var mins1 = parseInt(time1.substring(index+1));
 
     index = time2.indexOf(":");
-    console.log(time2);
-    console.log(time2.substring(0, index));
     var hours2 = parseInt(time2.substring(0, index));
     var mins2 = parseInt(time2.substring(index+1));
 
@@ -1358,17 +1355,7 @@ function currClass(){
       hours2 = hours2 + 12;
     }
 
-    console.log("hour1: " + hours1);
-    console.log("mins1: " + mins1);
-    console.log("hour2: " + hours2);
-    console.log("mins2: " + mins2);
-
-    console.log("HOUR: " + date.getHours());
-    console.log("MIN: " + date.getMinutes());
-
-
     if((hours1 == date.getHours() && mins1 <= date.getMinutes()) || (hours2 == date.getHours() && mins2 >= date.getMinutes()) || (hours1 < date.getHours() && hours2 > date.getHours())){
-      console.log("SAME TIME");
       classes[i].style.border = "3px solid yellow";
       //break;
     } else if((hours2 == date.getHours() && mins2 < date.getMinutes()) || hours2 < date.getHours()){
@@ -1376,7 +1363,7 @@ function currClass(){
       classes[i].style.color = "rgba(200, 200, 200, 0.8)";
     }
   }
-  var t = setTimeout(setTime, 500);
+  var x = setTimeout(currClass, 500);
 }
 
 
