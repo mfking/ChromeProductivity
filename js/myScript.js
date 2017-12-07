@@ -214,7 +214,7 @@ function showToDoList() {
 /******************************* Weather Script *******************************/
 
 var autocomplete;
-var countryRestrict = {'country': 'us'};
+//var countryRestrict = {'country': 'us'};
 var lat;
 var long;
 var weatherLocation = JSON.parse(localStorage.getItem("weatherLocation"));
@@ -231,7 +231,7 @@ if(!weatherLocation){
 // Restrict the search to the default country, and to place type "cities".
 autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')), {
     types: ['(cities)'],
-    componentRestrictions: countryRestrict
+    //componentRestrictions: countryRestrict
   });
 
 autocomplete.addListener('place_changed', onPlaceChanged);
@@ -665,10 +665,12 @@ for(i = 0; i < deleteCourse.length; i++){
     removeFromSched(course);
     //remove course and items from local storage
     var index = classList.indexOf(course);
+    console.log(classList);
     if(index > -1){
       classList.splice(index, 1);
     }
     localStorage.setItem("classes", JSON.stringify(classList));
+    console.log(classList);
     localStorage.removeItem(course);
   }
 }
@@ -1116,6 +1118,7 @@ if(element){
 }
 
 //add the classes based on the day of the week
+var count = 0;
 var date = new Date();
 var day = date.getDay();
 var i;
@@ -1124,6 +1127,7 @@ for(i = 0; i < classList.length; i++){
   var j;
   for(j = 0; j < times.length; j++){
     if(dayStringToNum(times[j][0]) == day){
+      count++;
       //create a element for the schedule
       var div = document.createElement("li");
       div.id = classList[i] + "SchedNode";
@@ -1151,7 +1155,26 @@ for(i = 0; i < classList.length; i++){
   }
 }
 
+//sort based on class times
 sortSched(document.getElementById('schedule'));
+noClasses();
+
+//if there are no classes today
+function noClasses(){
+  var list = document.getElementById('schedule').getElementsByClassName('schedNode');
+  if(list.length == 0){
+    //create a nice quote
+    var div = document.createElement('li');
+    div.id = "noClasses";
+    div.className = "noClasses";
+
+    var label = document.createElement('p');
+    label.innerText = "No classes today!\nEnjoy your Day :)"
+    div.appendChild(label);
+
+    document.getElementById('schedule').appendChild(div);
+  }
+}
 
 function dayStringToNum(day){
   var num;
@@ -1195,6 +1218,10 @@ function showSchedule(){
 } 
 
 function addToSchedule(course){
+  var noClasses = document.getElementById('noClasses');
+  if(noClasses){
+    noClasses.parentNode.removeChild(noClasses);
+  }
   var times = JSON.parse(localStorage.getItem(course + "Time"));
   var j;
   for(j = 0; j < times.length; j++){
@@ -1232,6 +1259,7 @@ function removeFromSched(course){
   if(node){
     node.parentElement.removeChild(node);
   }
+  noClasses();
 }
 
 function sortSched(list){

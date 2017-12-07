@@ -6,7 +6,6 @@ body, html{
     background: -o-linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); 
     background: -moz-linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); 
     background: linear-gradient(141deg, #0fb8ad, #1fc8db, #2cb5e8); */
-    background-image: "images/0.jpg";
     background-size: 100% 100%;
     height: 100%;
     margin: 0;
@@ -22,7 +21,7 @@ h1 {
 #header{
     text-align: center; 
     color: white;
-    font-size: 60px; 
+    font-size: 80px; 
     margin-top: 0px;
 }
 
@@ -53,13 +52,13 @@ h1 {
 .time {
     display: inline;
     color: white; 
-    font-size: 80px;
+    font-size: 100px;
 }
 
 .am {
     display: inline;
     color: white;
-    font-size: 30px;
+    font-size: 50px;
 }
 
 /* Transition CSS */
@@ -340,12 +339,10 @@ ul li.checked {
     z-index: 1;
     float: left;
     width: 100%;
-}
-
-.classes {
-    max-height: 200%;
+    max-height: 600px;
     overflow-y: scroll;
 }
+
 
 .addClass {
     min-height: 34px;
@@ -639,6 +636,18 @@ li.checked .dateSpan {
     font-size: 15px;
     padding-top: 5px;
     margin: 0;
+}
+
+.noClasses {
+    text-align: center;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.noClasses p {
+    margin: 0;
+    padding: 15px;
+    color: white;
 }
 
 /**************************** Productivity Styling ****************************/
