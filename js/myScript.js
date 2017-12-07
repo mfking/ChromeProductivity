@@ -662,7 +662,7 @@ for(i = 0; i < deleteCourse.length; i++){
 
     //get course name
     var course = div.id;
-
+    removeFromSched(course);
     //remove course and items from local storage
     var index = classList.indexOf(course);
     if(index > -1){
@@ -849,7 +849,7 @@ function addClass() {
     
       //get course name
       var course = div.id;
-    
+      removeFromSched(course);
       //remove course and items from local storage
       var index = classList.indexOf(course);
       if(index > -1){
@@ -922,6 +922,7 @@ function addClass() {
     //add meeting times to local storage
     localStorage.setItem(inputValue + "Time", JSON.stringify(meetingTimes));
 
+    addToSchedule(inputValue);
     //reset the button and input
     clearClassInput();
     removeMeetingTimes();
@@ -1193,8 +1194,44 @@ function showSchedule(){
   }
 } 
 
-function addToSchedule(){
+function addToSchedule(course){
+  var times = JSON.parse(localStorage.getItem(course + "Time"));
+  var j;
+  for(j = 0; j < times.length; j++){
+    if(dayStringToNum(times[j][0]) == day){
+      //create a element for the schedule
+      var div = document.createElement("li");
+      div.id = course + "SchedNode";
+      div.className = "schedNode";
+      div.style.background = localStorage.getItem(course + "Color");
 
+      //text
+      var label = document.createElement("p");
+      label.innerText = course;
+      label.className = "classLabel";
+      div.appendChild(label);
+
+      //time
+      var time = document.createElement("p");
+      time.innerText = times[j][1].substring(0, times[j][1].length - 2) + " to " + times[j][2].substring(0, times[j][2].length - 2);
+      time.className = "classTime";
+      if(times[j][1].substring(times[j][1].length - 2) === 'PM'){
+        time.classList.toggle("PM");
+      }
+      div.appendChild(time);
+
+      //add to schedule
+      document.getElementById('schedule').appendChild(div);
+    }
+  }
+  sortSched(document.getElementById('schedule'));
+}
+
+function removeFromSched(course){
+  var node = document.getElementById(course + "SchedNode");
+  if(node){
+    node.parentElement.removeChild(node);
+  }
 }
 
 function sortSched(list){
