@@ -663,7 +663,7 @@ li.checked .dateSpan {
     cursor: pointer;
     transition: 0.3s;
     position: absolute;
-    left: 100%;
+    right: 35%;
     bottom: 20px;
 }
 
@@ -678,8 +678,8 @@ li.checked .dateSpan {
     box-shadow: 0px -8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     float: left;
-    left: 60px;
-    right: 60px;
+    left: 5px;
+    right: 5px;
     bottom: 58px;
 }
 
