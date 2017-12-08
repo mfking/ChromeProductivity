@@ -770,6 +770,34 @@ li.checked .dateSpan {
 
 /**************************** Productivity Styling ****************************/
 
+table {
+    border-collapse: collapse;
+    width: 90%;
+    padding = 0;
+    padding-right: 10px;
+    margin = 0;
+    background: rgba(238, 238, 238, 0.8);
+}
+
+th {
+    height: 50px;
+}
+
+table, th, td {
+    text-align: center;
+    padding: 12px 8px 12px 40px;
+    /*background: rgba(238, 238, 238, 0.8);*/
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+
+
+tr:nth-child(odd) {
+    background: rgba(249, 249, 249, 0.8);
+}
+
+
 .prodBtn {
     padding: 10px;
     width: 30%;
@@ -800,21 +828,6 @@ li.checked .dateSpan {
     right: 5px;
     bottom: 58px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

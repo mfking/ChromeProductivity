@@ -1794,18 +1794,24 @@ else{
 
 
   $.each(sortedTimes.timing, function(i, v) {
-    var li = document.createElement("li");
+    var tr = document.createElement("tr");
+    var t1 = document.createElement("td");
+    var t2 = document.createElement("td");
+    var x = document.createTextNode(v.title)
     var mins = v.time / 60;
-    var pr = v.title + " - " + parseFloat(mins).toFixed(2) + " minutes";
-    var t = document.createTextNode(pr);
-    li.appendChild(t);
-    li.className = "toDoItem";
-    var ul = document.getElementById("prod");
-    if(ul){
-      ul.appendChild(li);
-    }
+    var y = document.createTextNode(parseFloat(mins).toFixed(2));
 
-    console.log("m" + mins);
+    t1.appendChild(x);
+    t2.appendChild(y);
+    tr.appendChild(t1);
+    tr.appendChild(t2);
+
+    //li.appendChild(t);
+    tr.className = "prodRow";
+    var table = document.getElementById("prod");
+    if(table){
+      table.appendChild(tr);
+    }
 
 
  
