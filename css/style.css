@@ -774,7 +774,6 @@ table {
     border-collapse: collapse;
     width: 90%;
     padding = 0;
-    padding-right: 10px;
     margin = 0;
     background: rgba(238, 238, 238, 0.8);
 }
