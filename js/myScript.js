@@ -1197,6 +1197,7 @@ for(i=0; i< eventList.length; i++){
   span.appendChild(txt);
   li.appendChild(span);
 }
+sortList(document.getElementById("allThingsList"));
 
 //add the events that are today
 var i;
@@ -1378,6 +1379,7 @@ function addEventToSchedule(event){
     //add to schedule
     document.getElementById('schedule').appendChild(div);
   }
+  sortSched(document.getElementById('schedule'));
 }
 
 
