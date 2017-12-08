@@ -22,7 +22,8 @@
 
  "permissions": [
     "history", 
-    "background", 
+    "background",
+    "tabs", 
     "alarms", 
     "notifications"
   ],
