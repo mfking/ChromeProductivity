@@ -191,14 +191,20 @@
 
 			<!-- PRODUCTIVITY -->
 			<div class="col">
+
 				<!-- are you getting this?? -->
 				<div id="prodWrapper" class="prodWrapper">
+					<div class="graph" id="chartContainer" style="height: 400px; max-width: 700px; margin: 0px auto;"></div>
 					<table id="prod" class="prod">
 						<tr id="prodTR" class="prodTR">
 							<th class="prodTH">Website</th>
 							<th class="prodTH">Minutes</th>
 						</tr>
 					</table>
+					<ul id="tabs prodTab" class="tabs prodTab">
+						<li class="tableTab selectedTab" id="tableTab">Table</li>
+						<li class="graphTab" id="graphTab">Graph</li>
+					</ul>
 				</div>
 				<a id="prodBtn" class="prodBtn"> Productivity </a>
 			</div>
@@ -211,5 +217,8 @@
   		<script type="text/javascript" 
   			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH87kBLMLDUxYIiHLKnICLSn0hGMcvoqU&libraries=places"></script>
   		<script type="text/javascript" src="js/myScript.js"></script> 
+  		<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+		<script type="text/javascript" src="js/graph.js"></script>
+		<script src="js/jquery.canvasjs.min.js"></script
 	</body>
 <html>

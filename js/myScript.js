@@ -1833,6 +1833,45 @@ if(element){
       }, false);
 }
 
+
+//Switch between Table and Graph
+var element = document.querySelector('.tableTab');
+if(element){
+  element.addEventListener("click", function(e){
+    showTable();
+  }, false);
+}
+
+var element = document.querySelector('.graphTab');
+if(element){
+  element.addEventListener("click", function(e){
+    showGraph();
+  }, false);
+}
+
+function showTable(){
+  console.log("HI");
+  var today = document.getElementById('prod');
+  var all = document.getElementById('chartContainer');
+  //console.log(today.style.display);
+  document.getElementById('tableTab').classList.toggle("selectedTab");
+  document.getElementById('graphTab').classList.toggle("selectedTab");
+  $(all).slideUp();
+  $(today).slideDown();
+}
+
+function showGraph(){
+  console.log("HI");
+  var today = document.getElementById('prod');
+  var all = document.getElementById('chartContainer');
+  //console.log(all.style.display);
+  document.getElementById('tableTab').classList.toggle("selectedTab");
+  document.getElementById('graphTab').classList.toggle("selectedTab");
+  document.getElementsByClassName('graph')[0];
+  $(today).slideUp();
+  $(all).slideDown();
+}
+
 //function to show productivity data
 function showProductivity(){
   var schedule = document.getElementById("prodWrapper");
