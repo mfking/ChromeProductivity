@@ -5,19 +5,6 @@ chrome.alarms.onAlarm.addListener(function( alarm ) {
 
 
 function showNotification(storedData) {
-	// var items = JSON.parse(localStorage.getItem('items'));
-	// if(items){
-	// 	if(items.length > 0){
-	// 		var id = new Date();
-	// 		id = "" + id;
-	// 		chrome.notifications.create(id, {
- //    	    	type: 'basic',
- //    	    	iconUrl: 'images/icon.png',
- //    	    	title: 'Don\'t forget!',
- //    	    	message: 'You have things to do. Wake up, dude!'
- //    		}, function(notificationId) {});
-	// 	}
-	// }
 	var count;
 	var classes = JSON.parse(localStorage.getItem("classes"));
 	if(classes){
