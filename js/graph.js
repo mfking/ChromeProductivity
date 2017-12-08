@@ -54,7 +54,7 @@ $.each(sortedTimes.timing, function(i, v){
 	var percent = (v.time / totalTime) * 100;
 	dataVals.push({
 		'y': percent,
-		'label': v.title
+		'label': deleteWs(v.title)
 	});
 });
 
@@ -63,17 +63,31 @@ window.onload = function() {
 	var chart = new CanvasJS.Chart("chartContainer", {
 		animationEnabled: true,
 		title: {
-			text: "Website Productivity"
+			text: "Website Productivity",
 		},
 		data: [{
 			type: "pie",
 			startAngle: 240,
 			yValueFormatString: "##0.00'%'",
-			//indexLabel: "{label} {y}",
+			indexLabelFontSize: 11,
+			indexLabel: "{label}",
 			dataPoints: dataVals
 		}]
 	});
 	chart.render();
 };
 
+function deleteWs(url) {
+	url = "" + url;
+	if(url.indexOf("www.") != -1){
+		url = url.substring(4);
+	}
+	console.log("testing.... " + url);
+	console.log(url.indexOf("www."));
+	var index = url.indexOf(".");
+	if(index != -1){
+		url = url.substring(0, index);
+	}
+	return url;
+}
 
