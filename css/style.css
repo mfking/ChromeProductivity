@@ -784,7 +784,7 @@ li.checked .dateSpan {
     height: 50px;
 }
 
-.prod, th, tr {
+.prod > th, tr {
     text-align: center;
     padding: 12px 8px 12px 40px;
     /*background: rgba(238, 238, 238, 0.8);*/
@@ -793,7 +793,7 @@ li.checked .dateSpan {
     width: 100%;
 }
 
-.prodRow, td{
+.prodRow > td{
   text-align: center;
     padding: 12px 8px 12px 40px;
     /*background: rgba(238, 238, 238, 0.8);*/
