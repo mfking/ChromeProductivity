@@ -1155,6 +1155,84 @@ for(i = 0; i < classList.length; i++){
   }
 }
 
+//get all the events and display them
+var eventList = JSON.parse(localStorage.getItem("events"));
+if(!eventList){
+  eventList = [];
+}
+var i;
+for(i=0; i< eventList.length; i++){
+  //create the list element and determinet the course
+  var li = document.createElement("li");
+
+  //create date 
+  var dateIn = eventList[i][1];
+  var dateSpan = document.createElement("div");
+  var dateTxt = document.createTextNode(createDateTxt(dateIn));
+
+  dateSpan.className = "dateSpan";
+  dateSpan.appendChild(dateTxt);
+  li.appendChild(dateSpan);
+
+  //create item title
+  var event = eventList[i][0];
+  var t = document.createTextNode(event);
+  li.appendChild(t);
+  li.className = "event";
+  if (event != '' && dateIn != '') {
+    document.getElementById('allThingsList').appendChild(li);
+  }
+
+  //get information about time
+  var start = eventList[i][2];
+  var end = eventList[i][3];
+
+  //sort the list
+  //sortList(document.getElementById("allThingsList"));
+
+  //create close button
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "closeEvent";
+  span.appendChild(txt);
+  li.appendChild(span);
+}
+
+//add the events that are today
+var i;
+for(i = 0; i < eventList.length; i++){
+  var arr = eventList[i][1].split("-");
+  var date = new Date(arr[1] + "/" + arr[2] + "/" + arr[0]);
+
+  var today = new Date();
+
+  if(today.getMonth() === date.getMonth() && today.getDay() === date.getDay() && today.getYear() === date.getYear()){
+    //create a element for the schedule
+    var div = document.createElement("li");
+    div.id = eventList[i][0] + "SchedNode";
+    div.className = "schedNode";
+    div.style.background = "rgba(169, 169, 169, 0.8)";
+
+    //text
+    var label = document.createElement("p");
+    label.innerText = eventList[i][0];
+    label.className = "classLabel";
+    div.appendChild(label);
+
+    //time
+    var time = document.createElement("p");
+    time.innerText = eventList[i][2].substring(0, eventList[i][2].length - 2) + " to " + eventList[i][3].substring(0, eventList[i][3].length - 2);
+    time.className = "classTime";
+    if(eventList[i][2].substring(eventList[i][2].length - 2) === 'PM'){
+      time.classList.toggle("PM");
+    }
+    div.appendChild(time);
+
+    //add to schedule
+    document.getElementById('schedule').appendChild(div);
+  }
+}
+
 //sort based on class times
 sortSched(document.getElementById('schedule'));
 noClasses();
@@ -1162,18 +1240,25 @@ noClasses();
 //if there are no classes today
 function noClasses(){
   var list = document.getElementById('schedule').getElementsByClassName('schedNode');
-  if(list.length == 0){
+  var none = document.getElementById('schedule').getElementsByClassName('noClasses');
+  if(list.length == 0 && none.length == 0){
     //create a nice quote
     var div = document.createElement('li');
     div.id = "noClasses";
     div.className = "noClasses";
 
     var label = document.createElement('p');
-    label.innerText = "No classes today!\nEnjoy your Day :)"
+    label.innerText = "Nothing today!\nEnjoy your Day :)"
     div.appendChild(label);
 
     document.getElementById('schedule').appendChild(div);
   }
+}
+
+//add the events to the all list
+var events = JSON.parse(localStorage.getItem("Events"));
+if(events){
+
 }
 
 function dayStringToNum(day){
@@ -1207,7 +1292,7 @@ function dayStringToNum(day){
 
 //function to show classes
 function showSchedule(){
-  var schedule = document.getElementById("schedule");
+  var schedule = document.getElementById("scheduleWrapper");
   var button = document.getElementById("scheduleBtn");
   $(schedule).slideToggle();
   if(button.innerText == 'Today'){
@@ -1253,6 +1338,49 @@ function addToSchedule(course){
   }
   sortSched(document.getElementById('schedule'));
 }
+
+function addEventToSchedule(event){
+  var index;
+  var i;
+  for(i = 0; i < eventList.length; i++){
+    if(event == eventList[i][0]){
+      index = i;
+      break;
+    }
+  }
+  var arr = eventList[index][1].split("-");
+  var date = new Date(arr[1] + "/" + arr[2] + "/" + arr[0]);
+
+  var today = new Date();
+
+  if(today.getMonth() === date.getMonth() && today.getDay() === date.getDay() && today.getYear() === date.getYear()){
+    //create a element for the schedule
+    var div = document.createElement("li");
+    div.id = eventList[index][0] + "SchedNode";
+    div.className = "schedNode";
+    div.style.background = "rgba(169, 169, 169, 0.8)";
+
+    //text
+    var label = document.createElement("p");
+    label.innerText = eventList[index][0];
+    label.className = "classLabel";
+    div.appendChild(label);
+
+    //time
+    var time = document.createElement("p");
+    time.innerText = eventList[index][2].substring(0, eventList[index][2].length - 2) + " to " + eventList[index][3].substring(0, eventList[index][3].length - 2);
+    time.className = "classTime";
+    if(eventList[index][2].substring(eventList[index][2].length - 2) === 'PM'){
+      time.classList.toggle("PM");
+    }
+    div.appendChild(time);
+
+    //add to schedule
+    document.getElementById('schedule').appendChild(div);
+  }
+}
+
+
 
 function removeFromSched(course){
   var node = document.getElementById(course + "SchedNode");
@@ -1365,6 +1493,261 @@ function currClass(){
   }
   var x = setTimeout(currClass, 500);
 }
+
+//Switch between Today and All
+var element = document.querySelector('.todayTab');
+if(element){
+  element.addEventListener("click", function(e){
+    showToday();
+  }, false);
+}
+
+var element = document.querySelector('.allTab');
+if(element){
+  element.addEventListener("click", function(e){
+    showAll();
+  }, false);
+}
+
+function showToday(){
+  console.log("HI");
+  var today = document.getElementById('schedule');
+  var all = document.getElementById('allThings');
+  console.log(today.style.display);
+  document.getElementById('todayTab').classList.toggle("selectedTab");
+  document.getElementById('allTab').classList.toggle("selectedTab");
+  $(all).slideUp();
+  $(today).slideDown();
+}
+
+function showAll(){
+  console.log("HI");
+  var today = document.getElementById('schedule');
+  var all = document.getElementById('allThings');
+  console.log(all.style.display);
+  document.getElementById('todayTab').classList.toggle("selectedTab");
+  document.getElementById('allTab').classList.toggle("selectedTab");
+  $(today).slideUp();
+  $(all).slideDown();
+}
+
+// Click on a close button to hide the current list item
+var eventClose = document.getElementsByClassName("closeEvent");
+var i;
+for (i = 0; i < eventClose.length; i++) {
+  eventClose[i].onclick = function() {
+
+    //remove the element from the display
+    var div = this.parentElement;
+    div.style.display = "none";
+  
+    //remove the element from the items list (storage)
+    var string = this.parentElement.innerText;
+    var index = -1;
+    var j;
+    for(j = 0; j < eventList.length;j++){
+      var txt = createDateTxt(eventList[j][1]) + eventList[j][0];
+      if(txt === string.substring(0, string.length-1)){
+        index = j;
+        break;
+      }
+    }
+    if(index > -1){
+      removeFromSched(eventList[index][0]);
+      eventList.splice(index, 1);
+    }
+    localStorage.setItem("events", JSON.stringify(eventList));
+  }
+}
+
+
+//add new event handler and function
+var element = document.querySelector('.addEventBtn');
+if(element){
+  element.addEventListener("click", function(e){
+    showAddEvent();
+  }, false);
+}
+
+function showAddEvent(){
+  var input = document.getElementById("newEventWrapper");
+  //var info = document.getElementById("newInfo");
+  var button = document.getElementById("addEventBtn");
+  $(input).toggle();
+  //$(info).slideToggle(100, "linear");
+  if(button.innerText === "+"){
+    button.innerText = "\u00D7";
+  } else {
+    button.innerText = "+";
+    clearEventInput();
+  }
+}
+
+var element = document.querySelector('.addEvent');
+if(element){
+  element.addEventListener("click", function(e){
+    addEvent();
+  }, false);
+}
+
+function addEvent(){
+  //create the list element and determinet the course
+  var li = document.createElement("li");
+
+  //create date 
+  var dateIn = document.getElementById("eventDate").value;
+  var dateSpan = document.createElement("div");
+  var dateTxt = document.createTextNode(createDateTxt(dateIn));
+
+  dateSpan.className = "dateSpan";
+  dateSpan.appendChild(dateTxt);
+  li.appendChild(dateSpan);
+
+  //create item title
+  var event = document.getElementById("eventInput").value;
+  var t = document.createTextNode(event);
+  li.appendChild(t);
+  li.className = "event";
+  li.id = event + "SchedNode";
+
+  var times = document.getElementById("eventTime").getElementsByClassName("eventTimeIn");
+  var timeGood = true;
+  for(i = 0; i < times.length; i++){
+    if(times[i].value == ''){
+      timeGood = false;
+      break;
+    }
+  }
+
+  if(dateIn != '' && event != '' && timeGood){
+
+    document.getElementById('allThingsList').appendChild(li);
+  
+    //get information about time
+    var times = document.getElementById('eventTime').getElementsByClassName("eventTimeIn");
+    var start = times[0].value + ":" + times[1].value + document.getElementById('eventTime').getElementsByClassName("AMPM")[0].value;
+    var end = times[2].value + ":" + times[3].value + document.getElementById('eventTime').getElementsByClassName("AMPM")[1].value;
+  
+  
+    //add the info to local storage
+    var eventArr = [event, dateIn, start, end];
+    eventList.push(eventArr);
+    localStorage.setItem("events", JSON.stringify(eventList));
+  
+    console.log(eventList);
+  
+    //sort the list
+    sortList(document.getElementById("allThingsList"));
+  
+    //create close button
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "closeEvent";
+    span.appendChild(txt);
+    li.appendChild(span);
+  
+    for (i = 0; i < eventClose.length; i++) {
+      eventClose[i].onclick = function() {
+        //remove the element from the display
+        var div = this.parentElement;
+        div.style.display = "none";
+      
+        //remove the element from the items list (storage)
+        var string = this.parentElement.innerText;
+        var index = -1;
+        var j;
+        for(j = 0; j < eventList.length;j++){
+          var txt = createDateTxt(eventList[j][1]) + eventList[j][0];
+          if(txt === string.substring(0, string.length-1)){
+            index = j;
+            break;
+          }
+        }
+        if(index > -1){
+          removeFromSched(eventList[index][0]);
+          eventList.splice(index, 1);
+        }
+        localStorage.setItem("events", JSON.stringify(eventList));
+      }
+    }
+
+    addEventToSchedule(event);
+  }
+
+  clearEventInput();
+  showAddEvent();
+}
+
+function clearEventInput(){
+  document.getElementById('eventInput').value = '';
+  document.getElementById('eventDate').value = document.getElementById('eventDate').defaultValue;
+  var times = document.getElementById("eventTime").getElementsByClassName('eventTimeIn');
+  var ampm = document.getElementById("newInfo").getElementsByClassName('AMPM');
+  var i;
+  for(i = 0; i < times.length; i++){
+    times[i].value = '';
+  }
+  for(i = 0; i < ampm.length; i++){
+    ampm[i].value = "AM";
+  }
+}
+
+//make sure input is not letters
+$('#startTimeEventHour').focusout(function() {
+    if(!isNaN(this.value)){
+      var time = parseInt(this.value);
+      if(time > 12){
+        this.value = "12";
+      } else if(time < 1){
+        this.value = "1";
+      }
+    } else {
+      this.value = '';
+    }
+});
+
+$('#endTimeEventHour').focusout(function() {
+    if(!isNaN(this.value)){
+      var time = parseInt(this.value);
+      if(time > 12){
+        this.value = "12";
+      } else if(time < 1){
+        this.value = "1";
+      }
+    } else {
+      this.value = '';
+    }
+});
+
+$('#startTimeEventMin').focusout(function() {
+    if(!isNaN(this.value)){
+      var time = parseInt(this.value);
+      if(time > 59){
+        this.value = "59";
+      } else if(time < 0){
+        this.value = "00";
+      } else if(time < 10){
+        this.value = "0" + time;
+      }
+    } else {
+      this.value = '';
+    }
+});
+
+$('#endTimeEventMin').focusout(function() {
+    if(!isNaN(this.value)){
+      var time = parseInt(this.value);
+      if(time > 59){
+        this.value = "59";
+      } else if(time < 0){
+        this.value = "00";
+      } else if(time < 10){
+        this.value = "0" + time;
+      }
+    } else {
+      this.value = '';
+    }
+});
 
 
 /******************************* Productivity Script *******************************/

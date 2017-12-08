@@ -146,8 +146,43 @@
 		<div class="row3">
 			<!-- SCHEDULE -->
 			<div class="col">
-				<ul id="schedule" class="schedule">
-				</ul>
+				<div id="scheduleWrapper" class="scheduleWrapper">
+					<ul id="schedule" class="schedule"></ul>
+					<div id="allThings" class="allThings">
+						<ul id="allThingsList" class="allThingsList"></ul>
+						<div class="eventBtnWrapper">
+							<a id="addEventBtn" class="addEventBtn">+</a>
+						</div>
+						<div id="newEventWrapper" class="newEventWrapper">
+							<div id="newEvent" class="newEvent">
+								<input class="eventInput" id="eventInput" type="text" name="eventInput" placeholder="new event...">
+								<input class="eventDate" id="eventDate" type="date" name="eventDate">
+								<a id="addEvent" class="addEvent">Add</a>
+							</div>
+							<div class="timeInfo" id="eventTime">
+								<input class="eventTimeIn hour" id="startTimeEventHour" type="text" maxlength="2" placeholder="12">
+								<label>:</label>
+								<input class="eventTimeIn min" id="startTimeEventMin" type="text" maxlength="2" placeholder="00">
+								<select class="AMPM" id="startEventAMPM">
+									<option value="AM">AM</option>
+									<option value="PM">PM</option>
+								</select>
+								<label id="to">to</label>
+								<input class="eventTimeIn hour" id="endTimeEventHour" type="text" maxlength="2" placeholder="12">
+								<label>:</label>
+								<input class="eventTimeIn min" id="endTimeEventMin" type="text" maxlength="2" placeholder="00">
+								<select class="AMPM" id="endEventAMPM">
+									<option value="AM">AM</option>
+									<option value="PM">PM</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<ul id="tabs" class="tabs">
+						<li class="todayTab selectedTab" id="todayTab">Today</li>
+						<li class="allTab" id="allTab">All</li>
+					</ul>
+				</div>
 				<a id="scheduleBtn" class="scheduleBtn"> Today </a>
 			</div>
 
