@@ -1197,6 +1197,7 @@ for(i=0; i< eventList.length; i++){
   span.appendChild(txt);
   li.appendChild(span);
 }
+schedHeight();
 sortList(document.getElementById("allThingsList"));
 
 //add the events that are today
@@ -1382,6 +1383,10 @@ function addEventToSchedule(event){
   sortSched(document.getElementById('schedule'));
 }
 
+function schedHeight(){
+  var height = eventList.length*45 + 34;
+  document.getElementById('allThings').style.minheight = height + "px";
+}
 
 
 function removeFromSched(course){
@@ -1675,7 +1680,7 @@ function addEvent(){
 
     addEventToSchedule(event);
   }
-
+  schedHeight();
   clearEventInput();
   showAddEvent();
 }
@@ -1830,7 +1835,7 @@ if(element){
 
 //function to show productivity data
 function showProductivity(){
-  var schedule = document.getElementById("prod");
+  var schedule = document.getElementById("prodWrapper");
   var button = document.getElementById("prodBtn");
   $(schedule).slideToggle();
   if(button.innerText == 'Productivity'){

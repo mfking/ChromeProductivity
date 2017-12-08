@@ -770,7 +770,7 @@ li.checked .dateSpan {
 
 /**************************** Productivity Styling ****************************/
 
-table {
+.prod {
     border-collapse: collapse;
     width: 90%;
     padding = 0;
@@ -778,11 +778,11 @@ table {
     background: rgba(238, 238, 238, 0.8);
 }
 
-th {
+.prodTH {
     height: 50px;
 }
 
-table, th, td {
+.prod, .prodTH, .prodTR {
     text-align: center;
     padding: 12px 8px 12px 40px;
     /*background: rgba(238, 238, 238, 0.8);*/
@@ -792,7 +792,7 @@ table, th, td {
 
 
 
-tr:nth-child(odd) {
+.prodTR:nth-child(odd) {
     background: rgba(249, 249, 249, 0.8);
 }
 
@@ -817,8 +817,12 @@ tr:nth-child(odd) {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
-.prod {
+.prodWrapper{
     display: none;
+}
+
+.prod {
+    /*display: none;*/
     position: absolute;
     box-shadow: 0px -8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
